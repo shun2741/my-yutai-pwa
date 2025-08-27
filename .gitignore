@@ -11,6 +11,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# macOS
+.DS_Store
+
 # Env
 .env
 .env.*
@@ -18,4 +21,3 @@ yarn-error.log*
 # Framework outputs
 .next/
 out/
-
