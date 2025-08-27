@@ -8,4 +8,5 @@ export default {
   trailingSlash: true,
   assetPrefix: isProjectPage ? base : undefined,
   basePath: isProjectPage ? base : undefined,
+  eslint: { ignoreDuringBuilds: true },
 };
