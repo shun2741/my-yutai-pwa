@@ -1,0 +1,1 @@
+export default function Page(){return <h1>株主優待管理（PWA）</h1>;}
