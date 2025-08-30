@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build catalog from CSV
+        run: npm run catalog:build
+
       - name: Build (Next.js static export)
         env:
           # リポジトリのサブパスに合わせて BASE PATH を設定
@@ -54,4 +57,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-

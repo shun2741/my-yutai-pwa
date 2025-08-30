@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "serve -s out -p 3000"
+    "start": "serve -s out -p 3000",
+    "catalog:build": "node scripts/build-catalog.cjs"
   },
   "dependencies": {
     "next": "14.2.5",
@@ -16,7 +17,9 @@
     "@types/node": "^24.3.0",
     "@types/react": "^19.1.11",
     "@types/react-dom": "^19.1.8",
+    "ajv": "^8.17.1",
     "autoprefixer": "^10.4.20",
+    "csv-parse": "^5.5.6",
     "postcss": "^8.4.45",
     "tailwindcss": "^3.4.10",
     "typescript": "^5.9.2"
