@@ -1,1 +1,13 @@
-body{font-family:sans-serif;margin:0;}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  --radius: 0.75rem;
+}
+
+html, body { height: 100%; }
+body { @apply antialiased; margin: 0; }
+
+/* 基本フォームの見た目調整 */
+input, select, textarea, button { font: inherit; }

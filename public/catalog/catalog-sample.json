@@ -1,0 +1,12 @@
+{
+  "version": "2025-08-30",
+  "companies": [
+    { "id": "comp_demo", "name": "デモフーズ", "chainIds": ["chain_demo"], "voucherTypes": ["食事"] }
+  ],
+  "chains": [
+    { "id": "chain_demo", "companyIds": ["comp_demo"], "displayName": "デモフーズ", "category": "飲食", "tags": [], "voucherTypes": ["食事"] }
+  ],
+  "stores": [
+    { "id": "store_tokyo_demo", "chainId": "chain_demo", "name": "デモフーズ 東京駅店", "address": "東京都千代田区丸の内1-9-1", "lat": 35.681236, "lng": 139.767125, "tags": [], "updatedAt": "2025-08-30T00:00:00Z" }
+  ]
+}
