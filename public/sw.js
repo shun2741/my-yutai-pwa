@@ -1,6 +1,7 @@
 // Simplified Service Worker for PWA + basic caching
-const APP_CACHE = 'app-shell-v1';
-const RUNTIME_CATALOG = 'runtime-catalog-v1';
+// バージョンを更新すると古いキャッシュを自動破棄し、更新が反映されやすくなります。
+const APP_CACHE = 'app-shell-v2';
+const RUNTIME_CATALOG = 'runtime-catalog-v2';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -63,4 +64,3 @@ self.addEventListener('fetch', (event) => {
     );
   }
 });
-
