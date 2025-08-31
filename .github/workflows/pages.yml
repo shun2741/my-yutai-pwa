@@ -37,6 +37,9 @@ jobs:
         env:
           # リポジトリのサブパスに合わせて BASE PATH を設定
           NEXT_PUBLIC_BASE_PATH: /my-yutai-pwa
+          # 外部URLのカタログを参照する場合は、Actions Variables に CATALOG_BASE を設定
+          # 例: https://<user>.github.io/<catalog-repo>/dist
+          NEXT_PUBLIC_CATALOG_BASE: ${{ vars.CATALOG_BASE }}
         run: npm run build
 
       - name: Setup Pages
