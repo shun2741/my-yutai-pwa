@@ -4,8 +4,36 @@ import { clearAll, getCatalog, getCatalogMeta, listHoldings, setCatalog, setCata
 import { BackupJson, SCHEMA_VERSION } from "../../lib/types";
 import Card, { CardBody, CardHeader } from "../../components/ui/Card";
 import Button from "../../components/ui/Button";
+import { useEffect, useMemo, useState } from "react";
+import { getCatalogBase } from "../../lib/catalogSync";
 
 export default function SettingsPage() {
+  const [catalogMeta, setMeta] = useState<{ hash?: string; fetchedAt?: number } | null>(null);
+
+  useEffect(() => {
+    (async () => setMeta((await getCatalogMeta()) || null))();
+  }, []);
+
+  const catalogBase = useMemo(() => getCatalogBase(), []);
+  const catalogBaseKind = useMemo(() => {
+    // http(s) で始まれば外部参照、それ以外は内蔵（basePath配下）
+    return /^https?:\/\//.test(catalogBase) ? "外部" : "内蔵";
+  }, [catalogBase]);
+  const fetchedAtText = useMemo(() => {
+    if (!catalogMeta?.fetchedAt) return "未取得";
+    try {
+      const d = new Date(catalogMeta.fetchedAt);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      const hh = String(d.getHours()).padStart(2, "0");
+      const mm = String(d.getMinutes()).padStart(2, "0");
+      return `${y}-${m}-${day} ${hh}:${mm}`;
+    } catch (_) {
+      return "-";
+    }
+  }, [catalogMeta]);
+
   async function exportJson() {
     const [holdings, catalog, catalog_meta] = await Promise.all([
       listHoldings(),
@@ -55,6 +83,23 @@ export default function SettingsPage() {
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">設定</h1>
+      <Card>
+        <CardHeader title="カタログ情報" />
+        <CardBody>
+          <div className="space-y-1 text-sm">
+            <div>
+              <span className="font-medium">参照先URL</span>: <code className="break-all">{catalogBase}</code>
+              <span className="ml-2 text-gray-500 dark:text-gray-400">（{catalogBaseKind}）</span>
+            </div>
+            <div>
+              <span className="font-medium">最終取得日時</span>: {fetchedAtText}
+            </div>
+            <div>
+              <span className="font-medium">現在のハッシュ</span>: {catalogMeta?.hash || "-"}
+            </div>
+          </div>
+        </CardBody>
+      </Card>
       <Card>
         <CardHeader title="バックアップ" />
         <CardBody>

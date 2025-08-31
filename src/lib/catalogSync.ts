@@ -3,7 +3,8 @@ import { Catalog } from "./types";
 
 type CatalogManifest = { version: string; hash: string; url: string };
 
-function baseUrl() {
+// 現在のカタログ参照ベースURLを返す（UI表示用にも利用）
+export function getCatalogBase(): string {
   const fromEnv = process.env.NEXT_PUBLIC_CATALOG_BASE;
   if (fromEnv) return fromEnv.replace(/\/$/, "");
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -13,7 +14,7 @@ function baseUrl() {
 
 export async function syncCatalog(): Promise<boolean> {
   try {
-    const b = baseUrl();
+    const b = getCatalogBase();
     // First try as-is. If not found, try with/without trailing /dist for robustness.
     const tried: string[] = [];
     const candidates = [
