@@ -53,7 +53,7 @@ self.addEventListener('fetch', (event) => {
 
   const dest = request.destination;
 
-  // Documents (HTML): Network First to avoid stale pages
+  // Documents (HTML): Network First to avoid stale pages (no-store to bypass HTTP cache)
   if (dest === 'document') {
     event.respondWith(
       (async () => {
@@ -61,7 +61,7 @@ self.addEventListener('fetch', (event) => {
         try {
           const controller = new AbortController();
           const t = setTimeout(() => controller.abort(), 4000);
-          const res = await fetch(request, { signal: controller.signal });
+          const res = await fetch(request, { signal: controller.signal, cache: 'no-store' });
           clearTimeout(t);
           if (res && res.ok) cache.put(request, res.clone());
           return res;
@@ -74,13 +74,13 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Next.js assets: prefer fresh (Network First with fallback)
+  // Next.js assets: prefer fresh (Network First with fallback, no-store to bypass HTTP cache)
   if (urlIsNextAsset(request)) {
     event.respondWith(
       (async () => {
         const cache = await caches.open(APP_CACHE);
         try {
-          const res = await fetch(request);
+          const res = await fetch(request, { cache: 'no-store' });
           if (res && res.ok) cache.put(request, res.clone());
           return res;
         } catch (_) {

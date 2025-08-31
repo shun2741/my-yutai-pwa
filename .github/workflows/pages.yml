@@ -59,6 +59,12 @@ jobs:
           HUSKY: 0
         run: npm run build
 
+      - name: Verify static export (basePath/CSS)
+        env:
+          NEXT_PUBLIC_BASE_PATH: /my-yutai-pwa
+          HUSKY: 0
+        run: npm run --silent check:pages
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
