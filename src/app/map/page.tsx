@@ -8,6 +8,8 @@ import Card, { CardBody } from "../../components/ui/Card";
 import Button from "../../components/ui/Button";
 import { Input, Label, Select } from "../../components/ui/Input";
 import { generateDummyStores } from "../../lib/dummy";
+import Toast from "../../components/ui/Toast";
+import { syncCatalog } from "../../lib/catalogSync";
 
 declare const L: any; // Leaflet (CDN)
 
@@ -21,6 +23,7 @@ export default function MapPage() {
   const dummyLayerRef = useRef<any | null>(null);
   const storeLayerRef = useRef<any | null>(null);
   const mapInstanceRef = useRef<any | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
 
   // フィルタ状態
   const [selectedCategory, setSelectedCategory] = useState<string>("");
@@ -95,6 +98,11 @@ export default function MapPage() {
   // フィルタ変更やカタログ取得後にレイヤーを再構築
   useEffect(() => {
     rebuildStoreLayer();
+    // ストアがあれば自動で全件にフィット（初回/絞り込み変更時）
+    if (filteredStores.length > 0 && mapInstanceRef.current) {
+      const b = L.latLngBounds(filteredStores.map((s) => [s.lat, s.lng]));
+      mapInstanceRef.current.fitBounds(b.pad(0.1));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredStores]);
 
@@ -120,6 +128,7 @@ export default function MapPage() {
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">マップ</h1>
+      <Toast message={toast} onClose={() => setToast(null)} />
       <Card>
         <CardBody>
           <div className="flex flex-col gap-3 md:flex-row md:items-end">
@@ -216,6 +225,19 @@ export default function MapPage() {
               if (!dummyLayerRef.current) return;
               dummyLayerRef.current.clearLayers();
             }}>ダミークリア</Button>
+            <div className="grow" />
+            <div className="text-sm text-gray-600 dark:text-gray-400 self-center">表示件数: {filteredStores.length} 件</div>
+            <Button variant="outline" onClick={() => {
+              if (!mapInstanceRef.current || filteredStores.length === 0) return;
+              const b = L.latLngBounds(filteredStores.map((s) => [s.lat, s.lng]));
+              mapInstanceRef.current.fitBounds(b.pad(0.1));
+            }}>全件にズーム</Button>
+            <Button onClick={async () => {
+              const updated = await syncCatalog();
+              const cat = await getCatalog();
+              setCatalog(cat);
+              setToast(updated ? 'カタログを同期しました' : 'カタログは最新です');
+            }}>最新カタログ同期</Button>
           </div>
           <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">ダミー店舗は一時表示のみで保存されません。</p>
         </CardBody>
