@@ -23,4 +23,5 @@
 - `.github/workflows/pages.yml` … 生成→Pagesデプロイ
 
 運用
-- CSVを更新 → main に push → CI が `dist/` を生成し Pages に公開（公開URLのルート直下に配置されます）→ このアプリは起動/フォーカスで同期
+- CSVを更新 → main に push → CI が `dist/` を生成し Pages に公開（公開URLのルート直下に配置）→ このアプリは起動/フォーカスで同期
+- 初回やテストで差分を出したい場合は companies.csv にダミー行（例: comp-seed）を追加すると manifest の hash が変わります
