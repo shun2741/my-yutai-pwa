@@ -27,6 +27,18 @@ jobs:
           node-version: 18
           cache: 'npm'
 
+      - name: Print catalog base (debug)
+        env:
+          NEXT_PUBLIC_CATALOG_BASE: ${{ vars.CATALOG_BASE }}
+        run: |
+          echo "vars.CATALOG_BASE='${{ vars.CATALOG_BASE }}'"
+          echo "env.NEXT_PUBLIC_CATALOG_BASE='$NEXT_PUBLIC_CATALOG_BASE'"
+          {
+            echo "# Catalog base debug";
+            echo "- vars.CATALOG_BASE: '${{ vars.CATALOG_BASE }}'";
+            echo "- env.NEXT_PUBLIC_CATALOG_BASE: '$NEXT_PUBLIC_CATALOG_BASE'";
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Install dependencies
         run: npm ci
 
