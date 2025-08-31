@@ -1,6 +1,6 @@
 {
-  "name": "株主優待管理（PWA）",
-  "short_name": "優待PWA",
+  "name": "株主優待管理アプリ YutaiGO",
+  "short_name": "YutaiGO",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
