@@ -1,7 +1,7 @@
-// Simplified Service Worker for PWA + basic caching
+// Simplified Service Worker for PWA + caching strategies
 // バージョンを更新すると古いキャッシュを自動破棄し、更新が反映されやすくなります。
-const APP_CACHE = 'app-shell-v2';
-const RUNTIME_CATALOG = 'runtime-catalog-v2';
+const APP_CACHE = 'app-shell-v3';
+const RUNTIME_CATALOG = 'runtime-catalog-v3';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -49,9 +49,31 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // App shell: Cache First for navigations/assets
   const dest = request.destination;
-  if (['document', 'style', 'script', 'image', 'font'].includes(dest)) {
+
+  // Documents (HTML): Network First to avoid stale pages
+  if (dest === 'document') {
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(APP_CACHE);
+        try {
+          const controller = new AbortController();
+          const t = setTimeout(() => controller.abort(), 4000);
+          const res = await fetch(request, { signal: controller.signal });
+          clearTimeout(t);
+          if (res && res.ok) cache.put(request, res.clone());
+          return res;
+        } catch (_) {
+          const cached = await cache.match(request);
+          return cached || fetch(request);
+        }
+      })()
+    );
+    return;
+  }
+
+  // Assets: Cache First
+  if (['style', 'script', 'image', 'font'].includes(dest)) {
     event.respondWith(
       (async () => {
         const cache = await caches.open(APP_CACHE);
