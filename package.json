@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "serve -s out -p 3000",
+    "check:pages": "NEXT_PUBLIC_BASE_PATH=${NEXT_PUBLIC_BASE_PATH:-/my-yutai-pwa} NEXT_PUBLIC_SW_VERSION=local-check next build && node scripts/check-export.mjs",
     "catalog:build": "node scripts/build-catalog.cjs",
     "catalog:add:company-chain": "node scripts/add-company-chain.cjs",
     "catalog:append:stores": "node scripts/append-stores.cjs",
@@ -19,6 +20,7 @@
     "react-dom": "18.3.1"
   },
   "devDependencies": {
+    "husky": "^9.0.11",
     "@types/node": "^24.3.0",
     "@types/react": "^19.1.11",
     "@types/react-dom": "^19.1.8",
@@ -28,5 +30,9 @@
     "postcss": "^8.4.45",
     "tailwindcss": "^3.4.10",
     "typescript": "^5.9.2"
-  }
+  },
+  "privateConfig": {
+    "notes": "Do not edit husky hooks manually"
+  },
+  "prepare": "husky"
 }

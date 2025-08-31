@@ -52,6 +52,8 @@ jobs:
           # 外部URLのカタログを参照する場合は、Actions Variables に CATALOG_BASE を設定
           # 例: https://<user>.github.io/<catalog-repo>
           NEXT_PUBLIC_CATALOG_BASE: ${{ vars.CATALOG_BASE }}
+          # Service Worker バージョン（キャッシュ名）に GitHub SHA を埋め込み、毎デプロイ更新
+          NEXT_PUBLIC_SW_VERSION: ${{ github.sha }}
         run: npm run build
 
       - name: Setup Pages

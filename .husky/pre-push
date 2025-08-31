@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Build with Pages basePath and verify exported HTML references base-prefixed assets
+echo "[pre-push] Building and verifying static export..."
+NEXT_PUBLIC_BASE_PATH=/my-yutai-pwa npm run --silent check:pages || {
+  echo "[pre-push] ❌ Export check failed. Fix issues before pushing." >&2
+  exit 1
+}
+echo "[pre-push] ✅ Export check passed"
