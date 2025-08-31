@@ -1,7 +1,9 @@
 // Simplified Service Worker for PWA + caching strategies
 // バージョンを更新すると古いキャッシュを自動破棄し、更新が反映されやすくなります。
-const APP_CACHE = 'app-shell-v4';
-const RUNTIME_CATALOG = 'runtime-catalog-v4';
+// キャッシュ名を更新して旧版のHTML/CSS/JSを確実に破棄する
+// 例: basePath やアセットパスが変わったときに旧ドキュメントが残ると、CSSが読めず「素のUI」に見えることがある
+const APP_CACHE = 'app-shell-v5';
+const RUNTIME_CATALOG = 'runtime-catalog-v5';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
