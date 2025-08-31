@@ -10,6 +10,7 @@
     "catalog:add:company-chain": "node scripts/add-company-chain.cjs",
     "catalog:append:stores": "node scripts/append-stores.cjs",
     "catalog:geocode": "node scripts/geocode-nominatim.cjs"
+    ,"catalog:import:osm": "node scripts/osm-import.cjs"
   },
   "dependencies": {
     "next": "14.2.5",

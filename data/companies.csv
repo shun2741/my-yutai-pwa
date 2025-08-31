@@ -2,4 +2,5 @@ id,name,ticker,chainIds,voucherTypes,notes
 comp-demofoods,デモフーズ,,chain-demofoods,食事,
 comp-yamadaretail,ヤマダリテール,,chain-yamadaretail,小売,
 comp-sakurahotel,さくらホテル,,chain-sakurahotel,宿泊,
+comp-skylark,すかいらーく,,chain-syabuyo,食事,
 test-company,コロワイド,,test001,食事,
