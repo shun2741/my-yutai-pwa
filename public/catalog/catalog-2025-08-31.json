@@ -32,6 +32,16 @@
       ]
     },
     {
+      "id": "comp-skylark",
+      "name": "すかいらーく",
+      "chainIds": [
+        "chain-syabuyo"
+      ],
+      "voucherTypes": [
+        "食事"
+      ]
+    },
+    {
       "id": "test-company",
       "name": "コロワイド",
       "chainIds": [
@@ -83,6 +93,21 @@
       "tags": [
         "ホテル"
       ]
+    },
+    {
+      "id": "chain-syabuyo",
+      "displayName": "しゃぶ葉",
+      "category": "飲食",
+      "companyIds": [
+        "comp-skylark"
+      ],
+      "voucherTypes": [
+        "食事"
+      ],
+      "tags": [
+        "しゃぶしゃぶ"
+      ],
+      "url": "https://www.syabu-yo.com/"
     },
     {
       "id": "test-chain",
@@ -165,6 +190,1496 @@
       "lng": 139.62198291117986,
       "tags": [],
       "updatedAt": ""
+    },
+    {
+      "id": "store-syabuyo-osm-node-309585724",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.9564072,
+      "lng": 139.7141539,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.171Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-1007140979",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "神奈川県 海老名市 14",
+      "lat": 35.4469032,
+      "lng": 139.3776853,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.176Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-1286756153",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.5624196,
+      "lng": 139.5532704,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.176Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-1668352895",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.4980434,
+      "lng": 135.5475695,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.176Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-1685980891",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.7332944,
+      "lng": 139.6677384,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.176Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-1749066848",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "愛知県名古屋市中川区小碓通３丁目２８",
+      "lat": 35.1213814,
+      "lng": 136.8689749,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.176Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-1757686420",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.6819388,
+      "lng": 139.5755135,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.176Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-1793142582",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 26.1950913,
+      "lng": 127.6650371,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.176Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-1798836993",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.7584758,
+      "lng": 139.6208665,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.176Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-1928918791",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.7161945,
+      "lng": 135.7794477,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.176Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-1942598904",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 37.486892,
+      "lng": 139.940672,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.176Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-1960252402",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.8954281,
+      "lng": 140.5013497,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.176Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-1973405697",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.4613427,
+      "lng": 139.5154403,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.176Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-2144956316",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.7707637,
+      "lng": 139.3093698,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.176Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-2186099739",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.692337,
+      "lng": 140.094343,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-2358052829",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.1418583,
+      "lng": 139.3965422,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-2815259555",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.0114423,
+      "lng": 138.4729306,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-2820155518",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.5507228,
+      "lng": 139.3360002,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-2947345452",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.6000826,
+      "lng": 139.5786678,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-3075282862",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.6812313,
+      "lng": 133.9085717,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-3174724267",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.7228988,
+      "lng": 139.9914406,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-3188074609",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "神奈川県 大和市 14",
+      "lat": 35.4671988,
+      "lng": 139.4609109,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-3201134703",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.7293187,
+      "lng": 139.6033971,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-3467389193",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "埼玉県 伊奈町",
+      "lat": 35.978108,
+      "lng": 139.6398133,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-3780663854",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.4290282,
+      "lng": 139.549162,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-4008131494",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.7672207,
+      "lng": 137.3708202,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-4171281793",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.5346415,
+      "lng": 139.4367951,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-4185071791",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.68599,
+      "lng": 139.447443,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-4199991797",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.7966477,
+      "lng": 139.9764487,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-4356710558",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.3183129,
+      "lng": 139.3985675,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-4698260192",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.0503222,
+      "lng": 140.1349488,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-4962917222",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.1333157,
+      "lng": 139.6024692,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-5030100837",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 38.9379156,
+      "lng": 139.8476954,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-5083123507",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.375286,
+      "lng": 139.2045143,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-5083531639",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.4043616,
+      "lng": 139.3134911,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-5107561195",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.6499059,
+      "lng": 139.5435252,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-5120976825",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 38.1636863,
+      "lng": 140.8938871,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-5225704471",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 33.8613026,
+      "lng": 130.7910049,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-5484916465",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.8123101,
+      "lng": 139.3769941,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-5493919940",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.6592107,
+      "lng": 139.5876755,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-5516414573",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.8327347,
+      "lng": 135.721417,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-5662567251",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.9381584,
+      "lng": 139.3921571,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-5893742786",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "北海道 札幌市 30",
+      "lat": 43.1201591,
+      "lng": 141.3172274,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-5963508419",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.7848893,
+      "lng": 135.6254047,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-5981088388",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.4300676,
+      "lng": 139.4683248,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-6060092290",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.7887376,
+      "lng": 135.4067997,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-6095283298",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.6093352,
+      "lng": 135.6049255,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-6254948792",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "鹿児島県 鹿児島市",
+      "lat": 31.5507028,
+      "lng": 130.5439547,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-6345697394",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.8844894,
+      "lng": 139.7403799,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-6446210130",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.9221443,
+      "lng": 139.5924711,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-6447030555",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 37.9048854,
+      "lng": 139.0482435,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-6762185718",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.8688985,
+      "lng": 139.6331057,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-6796328132",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.5403272,
+      "lng": 139.5969829,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-6942927068",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.0866363,
+      "lng": 137.1623708,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-7207276933",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.4405904,
+      "lng": 139.3662759,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-7396292320",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "兵庫県 加古川市 596-2",
+      "lat": 34.7472393,
+      "lng": 134.8623889,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-7559921933",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.6000495,
+      "lng": 139.6124674,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-7617455883",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.1339888,
+      "lng": 138.8728447,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-7884164711",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.5849759,
+      "lng": 139.8668191,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-8090201790",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.7576803,
+      "lng": 140.2983466,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-8380610213",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.5717908,
+      "lng": 139.4210073,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-8492123714",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.8158887,
+      "lng": 139.7109527,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-8868404455",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.4981615,
+      "lng": 139.5378135,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-9213868674",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.6172455,
+      "lng": 139.7071342,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-9378500602",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.2234524,
+      "lng": 138.6247855,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-9524507481",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.2464995,
+      "lng": 139.1913296,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-10043776289",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.7960712,
+      "lng": 140.317261,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-10197312681",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.8211992,
+      "lng": 139.5733914,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-10584338100",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.0445512,
+      "lng": 132.962682,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-10799430305",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.6983045,
+      "lng": 139.7746938,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-10877296218",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.172138,
+      "lng": 136.9075169,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-10913608023",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.8655596,
+      "lng": 139.9792367,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-10981866197",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.6649558,
+      "lng": 139.8586885,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-11083040905",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.6747987,
+      "lng": 135.5016151,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-11195878238",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.091844,
+      "lng": 136.2503751,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-11226190695",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.0021873,
+      "lng": 139.3946273,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-11279708793",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.4646369,
+      "lng": 139.6194403,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-11449569158",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.6037782,
+      "lng": 139.3416058,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-11659044227",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.0988049,
+      "lng": 139.0685689,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-11760235880",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.8004092,
+      "lng": 139.5656325,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-11951237187",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 40.526413,
+      "lng": 141.4986353,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-12022430687",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 33.8864057,
+      "lng": 130.8811747,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-12090475081",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.7553399,
+      "lng": 139.7369463,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-12305485020",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.7112034,
+      "lng": 139.7039548,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-12378988158",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.734004,
+      "lng": 139.7394078,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-12458444876",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.524058,
+      "lng": 139.6468118,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-12570593382",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.6429288,
+      "lng": 133.9247342,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-12582310155",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.6713637,
+      "lng": 135.7997777,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-12771499968",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.5678959,
+      "lng": 139.9958372,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-12813793011",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.5601273,
+      "lng": 139.89674,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.177Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-12947739492",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.0678682,
+      "lng": 138.0887158,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-12960501841",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.5504342,
+      "lng": 135.4820992,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-12968623083",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.3369812,
+      "lng": 139.4899091,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-13001418834",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.2774908,
+      "lng": 139.3775029,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-13091922473",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.2342364,
+      "lng": 139.5408978,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-node-13101028083",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 32.8633563,
+      "lng": 130.7329768,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-26796531",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.6551141,
+      "lng": 139.3280343,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-155089293",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.524988,
+      "lng": 139.4985636,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-184955044",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.73735,
+      "lng": 135.4415279,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-187046127",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.7967144,
+      "lng": 139.4542288,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-189159481",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.7225916,
+      "lng": 139.3734238,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-193614493",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 42.9949275,
+      "lng": 141.4551685,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-219082651",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.6540367,
+      "lng": 138.2224465,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-340909657",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.5035006,
+      "lng": 139.6062335,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-345701004",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.9446645,
+      "lng": 139.6432448,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-370676245",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.6312163,
+      "lng": 139.4328822,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-375528130",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.7338848,
+      "lng": 135.5930664,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-377697153",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.5013638,
+      "lng": 139.8747797,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-383491336",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.2743803,
+      "lng": 133.7693782,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-404432313",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.933981,
+      "lng": 137.1450157,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-424885945",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.7056403,
+      "lng": 139.5010264,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-447978698",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.3738371,
+      "lng": 139.9344865,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-457407375",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.5399152,
+      "lng": 140.6217262,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-465634510",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.2782524,
+      "lng": 136.2584341,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-520517939",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "栃木県 足利市 10-5",
+      "lat": 36.3184443,
+      "lng": 139.4467743,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-537911684",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 37.7789569,
+      "lng": 140.4859397,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-539225209",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.7801767,
+      "lng": 135.5177877,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-590416785",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.5537123,
+      "lng": 140.1596933,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-606201421",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "岡山県倉敷市八王寺町103-1",
+      "lat": 34.603522,
+      "lng": 133.7517187,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-658669044",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.4031965,
+      "lng": 138.2621596,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-714714547",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 33.5785902,
+      "lng": 130.4321677,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-739742904",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.6619757,
+      "lng": 135.5992102,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-758699353",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.6989209,
+      "lng": 137.6755895,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-797528443",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.3101101,
+      "lng": 139.1842341,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-807033260",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "宮城県 仙台市 65",
+      "lat": 38.2739687,
+      "lng": 140.8682829,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-842027574",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "岩手県 北上市",
+      "lat": 39.2876079,
+      "lng": 141.1041717,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-846137475",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.7691307,
+      "lng": 135.5700188,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-846404066",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "北海道 苫小牧市 6",
+      "lat": 42.6542107,
+      "lng": 141.6301883,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-848765635",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.4741296,
+      "lng": 135.4729883,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-849203630",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.1217805,
+      "lng": 136.9204838,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-881323773",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.6680026,
+      "lng": 139.3691859,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-881323774",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.6679217,
+      "lng": 139.3692904,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-972882446",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.397818,
+      "lng": 140.553901,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-995566749",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.6329978,
+      "lng": 135.5531918,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-1010125696",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "宮城県 仙台市",
+      "lat": 38.3182599,
+      "lng": 140.8992484,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-1028943780",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.3459073,
+      "lng": 139.3796625,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-1054211356",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.2159499,
+      "lng": 137.9794629,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-1079044465",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.8761183,
+      "lng": 139.9254607,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-1083097157",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "埼玉県 草加市 国道4号 清門2-1-48",
+      "lat": 35.8511211,
+      "lng": 139.7842909,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-1192240092",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 33.1913587,
+      "lng": 129.718324,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-1205253692",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.4067952,
+      "lng": 132.7499909,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-1209060761",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.4925935,
+      "lng": 136.6764713,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-1265755249",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 34.8608552,
+      "lng": 137.0442817,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-1266668476",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 37.1545375,
+      "lng": 138.2546445,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-1301796215",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 33.5678251,
+      "lng": 130.347955,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-1311166537",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 35.3831677,
+      "lng": 136.2845337,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-1327464037",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.0164609,
+      "lng": 139.5484776,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-1329091184",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 36.3007138,
+      "lng": 139.8043944,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
+    },
+    {
+      "id": "store-syabuyo-osm-way-1376963989",
+      "chainId": "chain-syabuyo",
+      "name": "しゃぶ葉",
+      "address": "",
+      "lat": 31.8700712,
+      "lng": 131.3926517,
+      "tags": [],
+      "updatedAt": "2025-08-31T05:26:05.178Z"
     }
   ]
 }
