@@ -6,19 +6,15 @@ type CatalogManifest = { version: string; hash: string; url: string };
 // 現在のカタログ参照ベースURLを返す（UI表示用にも利用）
 export function getCatalogBase(): string {
   const fromEnv = process.env.NEXT_PUBLIC_CATALOG_BASE;
-  if (fromEnv) {
-    // ユーザーが manifest のURLや JSON の直URLを設定しても安全に動くよう正規化
-    let v = fromEnv.trim();
-    v = v.replace(/\/$/, "");
-    // 末尾が *.json ならファイル名を取り除き、ディレクトリをベースとする
-    if (/\.json($|\?)/.test(v)) {
-      v = v.replace(/\/[^/]+\.json($|\?.*)?$/, "");
-    }
-    return v;
-  }
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-  // デフォルトで公開配下の <basePath>/catalog を見る
-  return `${basePath}/catalog`;
+  // 正規化関数
+  const normalize = (v: string) => {
+    let s = v.trim().replace(/\/$/, "");
+    if (/\.json($|\?)/.test(s)) s = s.replace(/\/[^/]+\.json($|\?.*)?$/, "");
+    return s;
+  };
+  if (fromEnv && fromEnv.trim()) return normalize(fromEnv);
+  // 明示要望: 既定で外部カタログを参照
+  return normalize("https://shun2741.github.io/yutai-catalog");
 }
 
 export async function syncCatalog(opts?: { force?: boolean }): Promise<boolean> {
