@@ -11,6 +11,7 @@
     "catalog:append:stores": "node scripts/append-stores.cjs",
     "catalog:geocode": "node scripts/geocode-nominatim.cjs"
     ,"catalog:import:osm": "node scripts/osm-import.cjs"
+    ,"catalog:replace:stores": "node scripts/replace-stores.cjs"
   },
   "dependencies": {
     "next": "14.2.5",

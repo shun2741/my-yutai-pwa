@@ -22,6 +22,8 @@ if (!brandName || !chainId) {
 }
 
 const OVERPASS = process.env.OVERPASS_URL || 'https://overpass-api.de/api/interpreter';
+const NOMINATIM = process.env.NOMINATIM_BASE || 'https://nominatim.openstreetmap.org';
+const REVERSE = process.env.OSM_IMPORT_REVERSE === '1';
 
 function toCsvLine(values) {
   return values
@@ -55,6 +57,16 @@ function buildQuery(name) {
   `;
 }
 
+async function reverseGeocode(lat, lon) {
+  const email = process.env.NOMINATIM_EMAIL || '';
+  const url = `${NOMINATIM}/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`;
+  const headers = { 'User-Agent': `my-yutai-pwa/0.1 ${email ? '('+email+')' : ''}` };
+  const res = await fetch(url, { headers });
+  if (!res.ok) return undefined;
+  const js = await res.json();
+  return js.display_name || undefined;
+}
+
 async function main() {
   const q = buildQuery(brandName);
   const js = await overpassQuery(q);
@@ -62,12 +74,43 @@ async function main() {
   for (const el of js.elements || []) {
     let lat, lon, name, addr;
     const tags = el.tags || {};
-    name = tags.name || brandName;
-    addr = [tags['addr:full'], tags['addr:province'], tags['addr:city'], tags['addr:district'], tags['addr:subdistrict'], tags['addr:street'], tags['addr:housenumber']]
-      .filter(Boolean).join(' ');
+    // 店名: name:ja / name / branch を考慮
+    const baseName = tags['name:ja'] || tags.name || brandName;
+    const branch = tags.branch || tags['branch:ja'] || '';
+    if (branch && !baseName.includes(branch)) {
+      name = `${baseName} ${branch}`;
+    } else {
+      name = baseName;
+    }
+    // 住所: できる限り addr:* を結合 + postcode
+    const addrParts = [
+      tags['addr:postcode'],
+      tags['addr:state'],
+      tags['addr:province'],
+      tags['addr:prefecture'],
+      tags['addr:county'],
+      tags['addr:city'],
+      tags['addr:district'],
+      tags['addr:subdistrict'],
+      tags['addr:suburb'],
+      tags['addr:neighbourhood'],
+      tags['addr:street'],
+      tags['addr:block_number'],
+      tags['addr:housenumber'],
+      tags['addr:full'],
+    ].filter(Boolean);
+    addr = addrParts.join(' ');
     if (el.type === 'node') { lat = el.lat; lon = el.lon; }
     else if (el.center) { lat = el.center.lat; lon = el.center.lon; }
     if (lat == null || lon == null) continue;
+    // 住所が空なら（オプション）リバースジオコーディングで補完
+    if (!addr && REVERSE) {
+      try {
+        const rev = await reverseGeocode(lat, lon);
+        if (rev) addr = rev;
+        await new Promise(r => setTimeout(r, 1100)); // 1 req/sec
+      } catch (_) {}
+    }
     const id = `store-${chainId.replace(/^chain-/, '')}-osm-${el.type}-${el.id}`;
     rows.push({ id, chainId, name, address: addr, lat, lng: lon, tags: '', updatedAt: new Date().toISOString() });
   }
@@ -85,4 +128,3 @@ async function main() {
 }
 
 main().catch((e) => { console.error(e.message || e); process.exit(1); });
-
