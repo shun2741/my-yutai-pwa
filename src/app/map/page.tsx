@@ -2,7 +2,7 @@
 
 import Script from "next/script";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { getCatalog } from "../../lib/db";
+import { getCatalog, listHoldings } from "../../lib/db";
 import { Catalog, CatalogChain, CatalogCompany } from "../../lib/types";
 import Card, { CardBody } from "../../components/ui/Card";
 import Button from "../../components/ui/Button";
@@ -24,21 +24,18 @@ export default function MapPage() {
   const mapInstanceRef = useRef<any | null>(null);
   const [toast, setToast] = useState<string | null>(null);
 
-  // フィルタ状態
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [selectedCompanyId, setSelectedCompanyId] = useState<string>("");
+  // フィルタ状態（チェーンのみ + 所有優待）
   const [selectedChainId, setSelectedChainId] = useState<string>("");
-  // 駅検索・範囲絞り込み
+  const [showOwnedOnly, setShowOwnedOnly] = useState<boolean>(false);
+  const [ownedCompanyIds, setOwnedCompanyIds] = useState<string[]>([]);
+  // 駅検索（中心移動のみ）
   const [stationQuery, setStationQuery] = useState<string>("");
   const [stationResults, setStationResults] = useState<Array<{ name: string; lat: number; lng: number }>>([]);
   const [selectedStation, setSelectedStation] = useState<{ name: string; lat: number; lng: number } | null>(null);
-  const [radiusKm, setRadiusKm] = useState<number>(1.5);
-  const [filterByRadius, setFilterByRadius] = useState<boolean>(false);
-  const [useMyLocation, setUseMyLocation] = useState<boolean>(false);
+  const [useMyLocation] = useState<boolean>(false);
 
   const companies: CatalogCompany[] = useMemo(() => catalog?.companies || [], [catalog]);
   const chains: CatalogChain[] = useMemo(() => catalog?.chains || [], [catalog]);
-  const categories = useMemo(() => Array.from(new Set((catalog?.chains || []).map((c) => c.category))), [catalog]);
 
   const chainMap = useMemo(() => {
     const m: Record<string, CatalogChain> = {};
@@ -53,23 +50,18 @@ export default function MapPage() {
 
   const filteredStores = useMemo(() => {
     let stores = catalog?.stores || [];
-    if (selectedCategory) {
-      stores = stores.filter((s) => chainMap[s.chainId]?.category === selectedCategory);
-    }
-    if (selectedCompanyId) {
-      stores = stores.filter((s) => chainMap[s.chainId]?.companyIds.includes(selectedCompanyId));
-    }
     if (selectedChainId) {
       stores = stores.filter((s) => s.chainId === selectedChainId);
     }
-    if (filterByRadius) {
-      const center = getFilterCenter();
-      if (center && radiusKm > 0) {
-        stores = stores.filter((s) => distanceKm(center, { lat: s.lat, lng: s.lng }) <= radiusKm);
-      }
+    if (showOwnedOnly && ownedCompanyIds.length > 0) {
+      stores = stores.filter((s) => {
+        const ch = chainMap[s.chainId];
+        if (!ch) return false;
+        return (ch.companyIds || []).some((id) => ownedCompanyIds.includes(id));
+      });
     }
     return stores;
-  }, [catalog, selectedCategory, selectedCompanyId, selectedChainId, chainMap, filterByRadius, radiusKm, selectedStation, useMyLocation]);
+  }, [catalog, selectedChainId, showOwnedOnly, ownedCompanyIds, chainMap]);
 
   useEffect(() => {
     (async () => setCatalog(await getCatalog()))();
@@ -135,8 +127,8 @@ export default function MapPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredStores]);
 
-  // 中心点/半径のオーバーレイ更新
-  useEffect(() => { updateCenterOverlay(); }, [filterByRadius, radiusKm, selectedStation, useMyLocation]);
+  // 中心点のオーバーレイ更新
+  useEffect(() => { updateCenterOverlay(); }, [selectedStation]);
 
   function rebuildStoreLayer() {
     const map = mapInstanceRef.current;
@@ -166,21 +158,8 @@ export default function MapPage() {
     if (!center) return;
     const marker = L.marker([center.lat, center.lng], { title: '中心点' });
     marker.addTo(layer);
-    if (filterByRadius && radiusKm > 0) {
-      const circle = L.circle([center.lat, center.lng], { radius: radiusKm * 1000, color: '#dc2626', fillColor: '#fca5a5', fillOpacity: 0.1 });
-      circle.addTo(layer);
-    }
   }
 
-  // 2点間距離（km）
-  function distanceKm(a: { lat: number; lng: number }, b: { lat: number; lng: number }) {
-    const R = 6371;
-    const toRad = (d: number) => (d * Math.PI) / 180;
-    const dLat = toRad(b.lat - a.lat);
-    const dLng = toRad(b.lng - a.lng);
-    const sa = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLng / 2) ** 2;
-    return 2 * R * Math.asin(Math.min(1, Math.sqrt(sa)));
-  }
 
   const myLocation = useRef<{ lat: number; lng: number } | null>(null);
   function getFilterCenter(): { lat: number; lng: number } | null {
@@ -231,6 +210,19 @@ export default function MapPage() {
     updateCenterOverlay();
   }
 
+  // 所有優待の会社IDをロード
+  useEffect(() => {
+    (async () => {
+      try {
+        const hs = await listHoldings();
+        const ids = Array.from(new Set(hs.map((h) => h.companyId).filter(Boolean)));
+        setOwnedCompanyIds(ids);
+      } catch (_) {
+        setOwnedCompanyIds([]);
+      }
+    })();
+  }, []);
+
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">マップ</h1>
@@ -238,24 +230,6 @@ export default function MapPage() {
       <Card>
         <CardBody>
           <div className="flex flex-col gap-3 md:flex-row md:items-end">
-            <div className="md:w-48">
-              <Label>カテゴリ</Label>
-              <Select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-                <option value="">すべて</option>
-                {categories.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </Select>
-            </div>
-            <div className="md:w-56">
-              <Label>会社</Label>
-              <Select value={selectedCompanyId} onChange={(e) => setSelectedCompanyId(e.target.value)}>
-                <option value="">すべて</option>
-                {companies.map((c) => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </Select>
-            </div>
             <div className="md:w-56">
               <Label>チェーン</Label>
               <Select value={selectedChainId} onChange={(e) => setSelectedChainId(e.target.value)}>
@@ -265,8 +239,14 @@ export default function MapPage() {
                 ))}
               </Select>
             </div>
+            <div className="md:w-56 pt-6">
+              <label className="inline-flex items-center gap-2 text-sm">
+                <input type="checkbox" className="h-4 w-4" checked={showOwnedOnly} onChange={(e) => setShowOwnedOnly(e.target.checked)} />
+                所有している優待のみ表示
+              </label>
+            </div>
             <div className="md:w-72">
-              <Label>駅名</Label>
+              <Label>駅名（中心に移動）</Label>
               <div className="flex gap-2">
                 <Input value={stationQuery} onChange={(e) => setStationQuery(e.target.value)} placeholder="例: 東京駅 / 渋谷" />
                 <Button onClick={() => searchStation(stationQuery)}>検索</Button>
@@ -281,24 +261,6 @@ export default function MapPage() {
                 </div>
               )}
             </div>
-            <div className="md:w-40">
-              <Label>半径 (km)</Label>
-              <Input type="number" min={0.1} step={0.1} value={radiusKm} onChange={(e) => setRadiusKm(Math.max(0.1, Number(e.target.value) || 0))} />
-            </div>
-            <div className="md:w-40">
-              <Label>範囲で絞る</Label>
-              <Select value={filterByRadius ? (useMyLocation ? 'myloc' : 'station') : ''} onChange={(e) => {
-                const v = e.target.value;
-                if (!v) { setFilterByRadius(false); return; }
-                setFilterByRadius(true);
-                setUseMyLocation(v === 'myloc');
-                updateCenterOverlay();
-              }}>
-                <option value="">しない</option>
-                <option value="station">駅を中心</option>
-                <option value="myloc">現在地を中心</option>
-              </Select>
-            </div>
             <div className="grow" />
             <div className="text-sm text-gray-600 dark:text-gray-400 self-center">表示件数: {filteredStores.length} 件</div>
             <Button variant="outline" onClick={() => {
@@ -307,6 +269,18 @@ export default function MapPage() {
               mapInstanceRef.current.fitBounds(b.pad(0.1));
             }}>全件にズーム</Button>
             <Button variant="outline" onClick={goToMyLocation}>現在地へ移動</Button>
+            <Button variant="outline" onClick={() => {
+              // 条件リセット
+              setSelectedChainId("");
+              setShowOwnedOnly(false);
+              setSelectedStation(null);
+              setStationQuery("");
+              updateCenterOverlay();
+              if (mapInstanceRef.current && (catalog?.stores || []).length > 0) {
+                const b = L.latLngBounds((catalog?.stores || []).map((s) => [s.lat, s.lng]));
+                mapInstanceRef.current.fitBounds(b.pad(0.1));
+              }
+            }}>条件リセット</Button>
             <Button onClick={async () => {
               const updated = await syncCatalog();
               const cat = await getCatalog();
