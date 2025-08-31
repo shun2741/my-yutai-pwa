@@ -5,7 +5,7 @@ import { BackupJson, SCHEMA_VERSION } from "../../lib/types";
 import Card, { CardBody, CardHeader } from "../../components/ui/Card";
 import Button from "../../components/ui/Button";
 import { useEffect, useMemo, useState } from "react";
-import { getCatalogBase } from "../../lib/catalogSync";
+import { getCatalogBase, syncCatalog } from "../../lib/catalogSync";
 
 export default function SettingsPage() {
   const [catalogMeta, setMeta] = useState<{ hash?: string; fetchedAt?: number } | null>(null);
@@ -33,6 +33,11 @@ export default function SettingsPage() {
       return "-";
     }
   }, [catalogMeta]);
+
+  async function syncNow() {
+    await syncCatalog({ force: true });
+    setMeta((await getCatalogMeta()) || null);
+  }
 
   async function exportJson() {
     const [holdings, catalog, catalog_meta] = await Promise.all([
@@ -96,6 +101,9 @@ export default function SettingsPage() {
             </div>
             <div>
               <span className="font-medium">現在のハッシュ</span>: {catalogMeta?.hash || "-"}
+            </div>
+            <div className="pt-1">
+              <Button size="sm" onClick={syncNow}>今すぐ同期</Button>
             </div>
           </div>
         </CardBody>
