@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "serve -s out -p 3000",
-    "catalog:build": "node scripts/build-catalog.cjs"
+    "catalog:build": "node scripts/build-catalog.cjs",
+    "catalog:add:company-chain": "node scripts/add-company-chain.cjs",
+    "catalog:append:stores": "node scripts/append-stores.cjs",
+    "catalog:geocode": "node scripts/geocode-nominatim.cjs"
   },
   "dependencies": {
     "next": "14.2.5",
