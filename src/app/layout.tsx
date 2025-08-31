@@ -31,7 +31,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <ThemeToggle />
           </div>
         </nav>
-        <main className="mx-auto max-w-screen-sm p-4">{children}</main>
+        <main className="mx-auto max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl p-4">
+          {children}
+        </main>
         <ServiceWorkerRegister />
       </body>
     </html>

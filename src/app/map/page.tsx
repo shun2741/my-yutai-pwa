@@ -229,8 +229,8 @@ export default function MapPage() {
       <Toast message={toast} onClose={() => setToast(null)} />
       <Card>
         <CardBody>
-          <div className="flex flex-col gap-3 md:flex-row md:items-end">
-            <div className="md:w-56">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3 items-end">
+            <div className="w-full">
               <Label>チェーン</Label>
               <Select value={selectedChainId} onChange={(e) => setSelectedChainId(e.target.value)}>
                 <option value="">すべて</option>
@@ -239,13 +239,13 @@ export default function MapPage() {
                 ))}
               </Select>
             </div>
-            <div className="md:w-56 pt-6">
+            <div className="w-full pt-6">
               <label className="inline-flex items-center gap-2 text-sm">
                 <input type="checkbox" className="h-4 w-4" checked={showOwnedOnly} onChange={(e) => setShowOwnedOnly(e.target.checked)} />
                 所有している優待のみ表示
               </label>
             </div>
-            <div className="md:w-72">
+            <div className="w-full lg:col-span-2">
               <Label>駅名（中心に移動）</Label>
               <div className="flex gap-2">
                 <Input value={stationQuery} onChange={(e) => setStationQuery(e.target.value)} placeholder="例: 東京駅 / 渋谷" />
@@ -261,15 +261,14 @@ export default function MapPage() {
                 </div>
               )}
             </div>
-            <div className="grow" />
             <div className="text-sm text-gray-600 dark:text-gray-400 self-center">表示件数: {filteredStores.length} 件</div>
-            <Button variant="outline" onClick={() => {
+            <Button className="w-full" variant="outline" onClick={() => {
               if (!mapInstanceRef.current || filteredStores.length === 0) return;
               const b = L.latLngBounds(filteredStores.map((s) => [s.lat, s.lng]));
               mapInstanceRef.current.fitBounds(b.pad(0.1));
             }}>全件にズーム</Button>
-            <Button variant="outline" onClick={goToMyLocation}>現在地へ移動</Button>
-            <Button variant="outline" onClick={() => {
+            <Button className="w-full" variant="outline" onClick={goToMyLocation}>現在地へ移動</Button>
+            <Button className="w-full" variant="outline" onClick={() => {
               // 条件リセット
               setSelectedChainId("");
               setShowOwnedOnly(false);
@@ -281,7 +280,7 @@ export default function MapPage() {
                 mapInstanceRef.current.fitBounds(b.pad(0.1));
               }
             }}>条件リセット</Button>
-            <Button onClick={async () => {
+            <Button className="w-full" onClick={async () => {
               const updated = await syncCatalog();
               const cat = await getCatalog();
               setCatalog(cat);
@@ -293,7 +292,7 @@ export default function MapPage() {
       </Card>
       <Card>
         <CardBody>
-          <div ref={mapRef} className="h-[70vh] w-full rounded-lg border border-gray-200 dark:border-gray-800" />
+          <div ref={mapRef} className="h-[70vh] lg:h-[78vh] w-full rounded-lg border border-gray-200 dark:border-gray-800" />
         </CardBody>
       </Card>
       {/* Leaflet CDN */}
