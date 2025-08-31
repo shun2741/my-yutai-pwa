@@ -17,6 +17,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: `try{const t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(_){}
           `}}
         />
+        {/* ベースパス配下での相対リンク/アセット解決を安定させる */}
+        {process.env.NEXT_PUBLIC_BASE_PATH ? (
+          <base href={`${process.env.NEXT_PUBLIC_BASE_PATH}${process.env.NEXT_PUBLIC_BASE_PATH.endsWith('/') ? '' : '/'}`} />
+        ) : null}
       </head>
       <body className="min-h-dvh bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-50">
         <nav className="sticky top-0 z-40 flex items-center gap-3 border-b border-gray-200 bg-white/70 px-4 py-3 backdrop-blur dark:border-gray-800 dark:bg-gray-900/70">

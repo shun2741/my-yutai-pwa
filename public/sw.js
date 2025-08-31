@@ -21,7 +21,8 @@ self.addEventListener('activate', (event) => {
 function isCatalogRequest(req) {
   try {
     const url = new URL(req.url);
-    return url.pathname.startsWith(`${self.registration.scope}catalog`);
+    const scopePath = new URL(self.registration.scope).pathname.replace(/\/$/, "");
+    return url.pathname.startsWith(`${scopePath}/catalog`);
   } catch (_) {
     return false;
   }
@@ -72,7 +73,25 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Assets: Cache First
+  // Next.js assets: prefer fresh (Network First with fallback)
+  if (urlIsNextAsset(request)) {
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(APP_CACHE);
+        try {
+          const res = await fetch(request);
+          if (res && res.ok) cache.put(request, res.clone());
+          return res;
+        } catch (_) {
+          const cached = await cache.match(request);
+          return cached || fetch(request);
+        }
+      })()
+    );
+    return;
+  }
+
+  // Other assets: Cache First
   if (['style', 'script', 'image', 'font'].includes(dest)) {
     event.respondWith(
       (async () => {
@@ -86,3 +105,13 @@ self.addEventListener('fetch', (event) => {
     );
   }
 });
+
+function urlIsNextAsset(request) {
+  try {
+    const u = new URL(request.url);
+    const scopePath = new URL(self.registration.scope).pathname.replace(/\/$/, "");
+    return u.pathname.startsWith(`${scopePath}/_next/`);
+  } catch (_) {
+    return false;
+  }
+}
