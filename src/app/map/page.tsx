@@ -3,11 +3,10 @@
 import Script from "next/script";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getCatalog } from "../../lib/db";
-import { Catalog, CatalogChain, CatalogCompany, CatalogStore } from "../../lib/types";
+import { Catalog, CatalogChain, CatalogCompany } from "../../lib/types";
 import Card, { CardBody } from "../../components/ui/Card";
 import Button from "../../components/ui/Button";
 import { Input, Label, Select } from "../../components/ui/Input";
-import { generateDummyStores } from "../../lib/dummy";
 import Toast from "../../components/ui/Toast";
 import { syncCatalog } from "../../lib/catalogSync";
 
@@ -19,8 +18,8 @@ export default function MapPage() {
   const mapRef = useRef<HTMLDivElement>(null);
   const [catalog, setCatalog] = useState<Catalog | undefined>();
   const [ready, setReady] = useState(false);
-  const [dummyCount, setDummyCount] = useState(100);
-  const dummyLayerRef = useRef<any | null>(null);
+  const myLocLayerRef = useRef<any | null>(null);
+  const poiLayerRef = useRef<any | null>(null);
   const storeLayerRef = useRef<any | null>(null);
   const mapInstanceRef = useRef<any | null>(null);
   const [toast, setToast] = useState<string | null>(null);
@@ -29,8 +28,13 @@ export default function MapPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedCompanyId, setSelectedCompanyId] = useState<string>("");
   const [selectedChainId, setSelectedChainId] = useState<string>("");
-  const [genInBounds, setGenInBounds] = useState<boolean>(false);
-  const [shape, setShape] = useState<"random" | "grid">("random");
+  // 駅検索・範囲絞り込み
+  const [stationQuery, setStationQuery] = useState<string>("");
+  const [stationResults, setStationResults] = useState<Array<{ name: string; lat: number; lng: number }>>([]);
+  const [selectedStation, setSelectedStation] = useState<{ name: string; lat: number; lng: number } | null>(null);
+  const [radiusKm, setRadiusKm] = useState<number>(1.5);
+  const [filterByRadius, setFilterByRadius] = useState<boolean>(false);
+  const [useMyLocation, setUseMyLocation] = useState<boolean>(false);
 
   const companies: CatalogCompany[] = useMemo(() => catalog?.companies || [], [catalog]);
   const chains: CatalogChain[] = useMemo(() => catalog?.chains || [], [catalog]);
@@ -58,8 +62,14 @@ export default function MapPage() {
     if (selectedChainId) {
       stores = stores.filter((s) => s.chainId === selectedChainId);
     }
+    if (filterByRadius) {
+      const center = getFilterCenter();
+      if (center && radiusKm > 0) {
+        stores = stores.filter((s) => distanceKm(center, { lat: s.lat, lng: s.lng }) <= radiusKm);
+      }
+    }
     return stores;
-  }, [catalog, selectedCategory, selectedCompanyId, selectedChainId, chainMap]);
+  }, [catalog, selectedCategory, selectedCompanyId, selectedChainId, chainMap, filterByRadius, radiusKm, selectedStation, useMyLocation]);
 
   useEffect(() => {
     (async () => setCatalog(await getCatalog()))();
@@ -106,8 +116,9 @@ export default function MapPage() {
       storeLayerRef.current = cluster.addTo(map);
       rebuildStoreLayer();
 
-      // ダミー表示レイヤー（CircleMarkerをまとめるグループ）
-      dummyLayerRef.current = L.layerGroup().addTo(map);
+      // 現在地と中心点の可視化レイヤー
+      myLocLayerRef.current = L.layerGroup().addTo(map);
+      poiLayerRef.current = L.layerGroup().addTo(map);
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -123,6 +134,9 @@ export default function MapPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredStores]);
+
+  // 中心点/半径のオーバーレイ更新
+  useEffect(() => { updateCenterOverlay(); }, [filterByRadius, radiusKm, selectedStation, useMyLocation]);
 
   function rebuildStoreLayer() {
     const map = mapInstanceRef.current;
@@ -141,6 +155,80 @@ export default function MapPage() {
       marker.bindPopup(html);
       layer.addLayer(marker);
     }
+  }
+
+  function updateCenterOverlay() {
+    const layer = poiLayerRef.current;
+    const map = mapInstanceRef.current;
+    if (!layer || !map) return;
+    layer.clearLayers();
+    const center = getFilterCenter();
+    if (!center) return;
+    const marker = L.marker([center.lat, center.lng], { title: '中心点' });
+    marker.addTo(layer);
+    if (filterByRadius && radiusKm > 0) {
+      const circle = L.circle([center.lat, center.lng], { radius: radiusKm * 1000, color: '#dc2626', fillColor: '#fca5a5', fillOpacity: 0.1 });
+      circle.addTo(layer);
+    }
+  }
+
+  // 2点間距離（km）
+  function distanceKm(a: { lat: number; lng: number }, b: { lat: number; lng: number }) {
+    const R = 6371;
+    const toRad = (d: number) => (d * Math.PI) / 180;
+    const dLat = toRad(b.lat - a.lat);
+    const dLng = toRad(b.lng - a.lng);
+    const sa = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.min(1, Math.sqrt(sa)));
+  }
+
+  const myLocation = useRef<{ lat: number; lng: number } | null>(null);
+  function getFilterCenter(): { lat: number; lng: number } | null {
+    if (useMyLocation && myLocation.current) return myLocation.current;
+    if (selectedStation) return { lat: selectedStation.lat, lng: selectedStation.lng };
+    return null;
+  }
+
+  async function goToMyLocation() {
+    try {
+      const pos = await new Promise<GeolocationPosition>((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: true, timeout: 5000 }));
+      const p = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      myLocation.current = p;
+      if (myLocLayerRef.current) {
+        myLocLayerRef.current.clearLayers();
+        const m = L.circleMarker([p.lat, p.lng], { radius: 6, color: '#10b981', fillColor: '#34d399', fillOpacity: 0.9 });
+        m.bindPopup('現在地');
+        m.addTo(myLocLayerRef.current);
+      }
+      if (mapInstanceRef.current) mapInstanceRef.current.setView([p.lat, p.lng], 14);
+      updateCenterOverlay();
+    } catch (_) {
+      setToast('現在地を取得できませんでした');
+    }
+  }
+
+  async function searchStation(q: string) {
+    const query = q.trim();
+    if (!query) { setStationResults([]); return; }
+    try {
+      const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&countrycodes=jp&limit=8&accept-language=ja&q=${encodeURIComponent(query + ' 駅')}`;
+      const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+      if (!res.ok) throw new Error('search failed');
+      const json: any[] = await res.json();
+      const results = json.map((r) => ({ name: r.display_name as string, lat: Number(r.lat), lng: Number(r.lon) }));
+      setStationResults(results);
+    } catch (_) {
+      setStationResults([]);
+      setToast('駅の検索に失敗しました');
+    }
+  }
+
+  function selectStation(s: { name: string; lat: number; lng: number }) {
+    setSelectedStation(s);
+    setStationResults([]);
+    setStationQuery(s.name);
+    if (mapInstanceRef.current) mapInstanceRef.current.setView([s.lat, s.lng], 14);
+    updateCenterOverlay();
   }
 
   return (
@@ -177,72 +265,40 @@ export default function MapPage() {
                 ))}
               </Select>
             </div>
-            <div className="md:w-56">
-              <Label>ダミー店舗数</Label>
-              <Input type="number" min={1} max={2000} value={dummyCount}
-                     onChange={(e) => setDummyCount(Math.max(1, Math.min(2000, Number(e.target.value) || 0)))} />
+            <div className="md:w-72">
+              <Label>駅名</Label>
+              <div className="flex gap-2">
+                <Input value={stationQuery} onChange={(e) => setStationQuery(e.target.value)} placeholder="例: 東京駅 / 渋谷" />
+                <Button onClick={() => searchStation(stationQuery)}>検索</Button>
+              </div>
+              {stationResults.length > 0 && (
+                <div className="mt-1 max-h-52 overflow-auto rounded-md border border-gray-200 bg-white text-sm shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                  {stationResults.map((r, i) => (
+                    <button key={`${r.name}-${i}`} type="button" className="block w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => selectStation(r)}>
+                      {r.name}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="md:w-40">
-              <Label>生成範囲</Label>
-              <Select value={genInBounds ? "bounds" : "radius"} onChange={(e) => setGenInBounds(e.target.value === "bounds")}>
-                <option value="radius">中心から半径</option>
-                <option value="bounds">画面範囲内</option>
-              </Select>
+              <Label>半径 (km)</Label>
+              <Input type="number" min={0.1} step={0.1} value={radiusKm} onChange={(e) => setRadiusKm(Math.max(0.1, Number(e.target.value) || 0))} />
             </div>
             <div className="md:w-40">
-              <Label>形状</Label>
-              <Select value={shape} onChange={(e) => setShape(e.target.value as any)}>
-                <option value="random">ランダム散布</option>
-                <option value="grid">格子状</option>
+              <Label>範囲で絞る</Label>
+              <Select value={filterByRadius ? (useMyLocation ? 'myloc' : 'station') : ''} onChange={(e) => {
+                const v = e.target.value;
+                if (!v) { setFilterByRadius(false); return; }
+                setFilterByRadius(true);
+                setUseMyLocation(v === 'myloc');
+                updateCenterOverlay();
+              }}>
+                <option value="">しない</option>
+                <option value="station">駅を中心</option>
+                <option value="myloc">現在地を中心</option>
               </Select>
             </div>
-            <Button onClick={() => {
-              if (!dummyLayerRef.current) return;
-              const mapEl = (dummyLayerRef.current as any)._map;
-              if (!mapEl) return;
-              let points: CatalogStore[] = [];
-              if (genInBounds) {
-                const b = mapEl.getBounds();
-                if (shape === 'grid') {
-                  const n = Math.ceil(Math.sqrt(dummyCount));
-                  const latStep = (b.getNorth() - b.getSouth()) / (n + 1);
-                  const lngStep = (b.getEast() - b.getWest()) / (n + 1);
-                  let placed = 0;
-                  for (let i = 1; i <= n && placed < dummyCount; i++) {
-                    for (let j = 1; j <= n && placed < dummyCount; j++) {
-                      points.push({
-                        id: `dummy_grid_${Date.now()}_${i}_${j}`,
-                        chainId: 'dummy_chain',
-                        name: `ダミー店舗 ${++placed}`,
-                        address: '(ダミー)',
-                        lat: b.getSouth() + latStep * i,
-                        lng: b.getWest() + lngStep * j,
-                        tags: [],
-                        updatedAt: new Date().toISOString(),
-                      });
-                    }
-                  }
-                } else {
-                  for (let i = 0; i < dummyCount; i++) {
-                    const lat = b.getSouth() + Math.random() * (b.getNorth() - b.getSouth());
-                    const lng = b.getWest() + Math.random() * (b.getEast() - b.getWest());
-                    points.push({ id: `dummy_bounds_${Date.now()}_${i}`, chainId: 'dummy_chain', name: `ダミー店舗 ${i+1}`, address: '(ダミー)', lat, lng, tags: [], updatedAt: new Date().toISOString() });
-                  }
-                }
-              } else {
-                const center = mapEl.getCenter();
-                points = generateDummyStores({ lat: center.lat, lng: center.lng }, dummyCount);
-              }
-              points.forEach((s) => {
-                const c = L.circleMarker([s.lat, s.lng], { radius: 5, color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 0.8 });
-                c.bindPopup(s.name + '（ダミー）');
-                c.addTo(dummyLayerRef.current);
-              });
-            }}>ダミー追加</Button>
-            <Button variant="outline" onClick={() => {
-              if (!dummyLayerRef.current) return;
-              dummyLayerRef.current.clearLayers();
-            }}>ダミークリア</Button>
             <div className="grow" />
             <div className="text-sm text-gray-600 dark:text-gray-400 self-center">表示件数: {filteredStores.length} 件</div>
             <Button variant="outline" onClick={() => {
@@ -250,6 +306,7 @@ export default function MapPage() {
               const b = L.latLngBounds(filteredStores.map((s) => [s.lat, s.lng]));
               mapInstanceRef.current.fitBounds(b.pad(0.1));
             }}>全件にズーム</Button>
+            <Button variant="outline" onClick={goToMyLocation}>現在地へ移動</Button>
             <Button onClick={async () => {
               const updated = await syncCatalog();
               const cat = await getCatalog();
@@ -257,7 +314,7 @@ export default function MapPage() {
               setToast(updated ? 'カタログを同期しました' : 'カタログは最新です');
             }}>最新カタログ同期</Button>
           </div>
-          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">ダミー店舗は一時表示のみで保存されません。</p>
+          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">駅検索はOpenStreetMapのNominatimを利用します。</p>
         </CardBody>
       </Card>
       <Card>
