@@ -86,6 +86,13 @@ export default function MapPage() {
   }, []);
 
   useEffect(() => {
+    // 既に Leaflet が読み込まれているナビゲーション遷移時にも初期化できるようにする
+    if (typeof window !== 'undefined' && (window as any).L) {
+      setReady(true);
+    }
+  }, []);
+
+  useEffect(() => {
     if (!ready || !mapRef.current) return;
 
     const init = async () => {
@@ -111,10 +118,24 @@ export default function MapPage() {
       // 現在地と中心点の可視化レイヤー
       myLocLayerRef.current = L.layerGroup().addTo(map);
       poiLayerRef.current = L.layerGroup().addTo(map);
+
+      // ナビゲーション遷移後にコンテナサイズが確定していない場合の描画崩れ対策
+      try { setTimeout(() => map.invalidateSize(), 0); } catch (_) {}
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready]);
+
+  // 画面サイズ変更やフォーカス時にサイズ再計算
+  useEffect(() => {
+    const fn = () => { try { mapInstanceRef.current?.invalidateSize(); } catch (_) {} };
+    window.addEventListener('resize', fn);
+    window.addEventListener('focus', fn);
+    return () => {
+      window.removeEventListener('resize', fn);
+      window.removeEventListener('focus', fn);
+    };
+  }, []);
 
   // フィルタ変更やカタログ取得後にレイヤーを再構築
   useEffect(() => {
