@@ -1,0 +1,73 @@
+{
+  "version": "2025-08-30",
+  "companies": [
+    {
+      "id": "comp-demofoods",
+      "name": "デモフーズ",
+      "chainIds": [
+        "chain-demofoods"
+      ],
+      "voucherTypes": [
+        "食事"
+      ]
+    },
+    {
+      "id": "test-company",
+      "name": "コロワイド",
+      "chainIds": [
+        "test001"
+      ],
+      "voucherTypes": [
+        "食事"
+      ]
+    }
+  ],
+  "chains": [
+    {
+      "id": "chain-demofoods",
+      "displayName": "デモフーズ",
+      "category": "飲食",
+      "companyIds": [
+        "comp-demofoods"
+      ],
+      "voucherTypes": [
+        "食事"
+      ],
+      "tags": []
+    },
+    {
+      "id": "test-chain",
+      "displayName": "かっぱ寿司",
+      "category": "飲食",
+      "companyIds": [
+        "test-company"
+      ],
+      "voucherTypes": [
+        "食事"
+      ],
+      "tags": []
+    }
+  ],
+  "stores": [
+    {
+      "id": "store-demofoods-tokyo-01",
+      "chainId": "chain-demofoods",
+      "name": "デモフーズ 東京駅店",
+      "address": "東京都千代田区丸の内1-9-1",
+      "lat": 35.681236,
+      "lng": 139.767125,
+      "tags": [],
+      "updatedAt": "2025-09-01T00:00:00Z"
+    },
+    {
+      "id": "test-store",
+      "chainId": "test-chain",
+      "name": "かっぱ寿司 横浜西口エキニア店",
+      "address": "〒220-0004 神奈川県横浜市西区北幸１丁目１−８ エキニア横浜 2階",
+      "lat": 35.46779903308429,
+      "lng": 139.62198291117986,
+      "tags": [],
+      "updatedAt": ""
+    }
+  ]
+}

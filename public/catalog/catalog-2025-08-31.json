@@ -1,0 +1,170 @@
+{
+  "version": "2025-08-31",
+  "companies": [
+    {
+      "id": "comp-demofoods",
+      "name": "デモフーズ",
+      "chainIds": [
+        "chain-demofoods"
+      ],
+      "voucherTypes": [
+        "食事"
+      ]
+    },
+    {
+      "id": "comp-yamadaretail",
+      "name": "ヤマダリテール",
+      "chainIds": [
+        "chain-yamadaretail"
+      ],
+      "voucherTypes": [
+        "小売"
+      ]
+    },
+    {
+      "id": "comp-sakurahotel",
+      "name": "さくらホテル",
+      "chainIds": [
+        "chain-sakurahotel"
+      ],
+      "voucherTypes": [
+        "宿泊"
+      ]
+    },
+    {
+      "id": "test-company",
+      "name": "コロワイド",
+      "chainIds": [
+        "test001"
+      ],
+      "voucherTypes": [
+        "食事"
+      ]
+    }
+  ],
+  "chains": [
+    {
+      "id": "chain-demofoods",
+      "displayName": "デモフーズ",
+      "category": "飲食",
+      "companyIds": [
+        "comp-demofoods"
+      ],
+      "voucherTypes": [
+        "食事"
+      ],
+      "tags": []
+    },
+    {
+      "id": "chain-yamadaretail",
+      "displayName": "ヤマダリテール",
+      "category": "小売",
+      "companyIds": [
+        "comp-yamadaretail"
+      ],
+      "voucherTypes": [
+        "金券"
+      ],
+      "tags": [
+        "家電"
+      ],
+      "url": "https://example.com/yamada"
+    },
+    {
+      "id": "chain-sakurahotel",
+      "displayName": "さくらホテル",
+      "category": "宿泊",
+      "companyIds": [
+        "comp-sakurahotel"
+      ],
+      "voucherTypes": [
+        "割引"
+      ],
+      "tags": [
+        "ホテル"
+      ]
+    },
+    {
+      "id": "test-chain",
+      "displayName": "かっぱ寿司",
+      "category": "飲食",
+      "companyIds": [
+        "test-company"
+      ],
+      "voucherTypes": [
+        "食事"
+      ],
+      "tags": []
+    }
+  ],
+  "stores": [
+    {
+      "id": "store-demofoods-tokyo-01",
+      "chainId": "chain-demofoods",
+      "name": "デモフーズ 東京駅店",
+      "address": "東京都千代田区丸の内1-9-1",
+      "lat": 35.681236,
+      "lng": 139.767125,
+      "tags": [],
+      "updatedAt": "2025-09-01T00:00:00Z"
+    },
+    {
+      "id": "store-yamada-shinjuku-01",
+      "chainId": "chain-yamadaretail",
+      "name": "ヤマダリテール 新宿本店",
+      "address": "東京都新宿区西新宿1-1-1",
+      "lat": 35.690921,
+      "lng": 139.700258,
+      "tags": [
+        "家電"
+      ],
+      "updatedAt": "2025-09-01T00:00:00Z"
+    },
+    {
+      "id": "store-yamada-akihabara-01",
+      "chainId": "chain-yamadaretail",
+      "name": "ヤマダリテール 秋葉原店",
+      "address": "東京都千代田区外神田4-4-3",
+      "lat": 35.703306,
+      "lng": 139.77102,
+      "tags": [
+        "家電"
+      ],
+      "updatedAt": "2025-09-01T00:00:00Z"
+    },
+    {
+      "id": "store-sakura-tokyo-01",
+      "chainId": "chain-sakurahotel",
+      "name": "さくらホテル 東京",
+      "address": "東京都千代田区",
+      "lat": 35.689501,
+      "lng": 139.691733,
+      "tags": [
+        "ホテル"
+      ],
+      "updatedAt": "2025-09-01T00:00:00Z"
+    },
+    {
+      "id": "store-sakura-osaka-01",
+      "chainId": "chain-sakurahotel",
+      "name": "さくらホテル 大阪",
+      "address": "大阪府大阪市北区梅田",
+      "lat": 34.702485,
+      "lng": 135.495951,
+      "tags": [
+        "ホテル"
+      ],
+      "updatedAt": "2025-09-01T00:00:00Z"
+    },
+    {
+      "id": "test-store",
+      "chainId": "test-chain",
+      "name": "かっぱ寿司 横浜西口エキニア店",
+      "address": "〒220-0004 神奈川県横浜市西区北幸１丁目１−８ エキニア横浜 2階",
+      "lat": 35.46779903308429,
+      "lng": 139.62198291117986,
+      "tags": [],
+      "updatedAt": ""
+    }
+  ]
+}
