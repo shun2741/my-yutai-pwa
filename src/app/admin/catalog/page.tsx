@@ -315,8 +315,13 @@ export default function AdminCatalogPage() {
                     </td>
                     <td className="px-2 py-1">
                       {editingCompanyId === c.id ? (
-                        <Input value={(Array.isArray(companyDraft.voucherTypes)?companyDraft.voucherTypes.join(','):String(companyDraft.voucherTypes||''))}
-                               onChange={(e)=>setCompanyDraft(d=>({...d, voucherTypes:e.target.value}))} />
+                        <Input
+                          value={(Array.isArray(companyDraft.voucherTypes)?companyDraft.voucherTypes.join(','):String(companyDraft.voucherTypes||''))}
+                          onChange={(e)=>setCompanyDraft(d=>({
+                            ...d,
+                            voucherTypes: e.target.value.split(',').map(s=>s.trim()).filter(Boolean)
+                          }))}
+                        />
                       ) : (
                         c.voucherTypes.join(",")
                       )}
@@ -365,8 +370,13 @@ export default function AdminCatalogPage() {
                     </td>
                     <td className="px-2 py-1 font-mono">
                       {editingChainId === c.id ? (
-                        <Input value={(Array.isArray(chainDraft.companyIds)?chainDraft.companyIds.join(','):String(chainDraft.companyIds||''))}
-                               onChange={(e)=>setChainDraft(d=>({...d, companyIds:e.target.value}))} />
+                        <Input
+                          value={(Array.isArray(chainDraft.companyIds)?chainDraft.companyIds.join(','):String(chainDraft.companyIds||''))}
+                          onChange={(e)=>setChainDraft(d=>({
+                            ...d,
+                            companyIds: e.target.value.split(',').map(s=>s.trim()).filter(Boolean)
+                          }))}
+                        />
                       ) : c.companyIds.join(',')}
                     </td>
                     <td className="px-2 py-1 text-center">
@@ -439,12 +449,12 @@ export default function AdminCatalogPage() {
                     </td>
                     <td className="px-2 py-1 text-right">
                       {editingStoreId === s.id ? (
-                        <Input value={String(storeDraft.lat ?? s.lat)} onChange={(e)=>setStoreDraft(d=>({...d, lat:e.target.value}))} />
+                        <Input value={String(storeDraft.lat ?? s.lat)} onChange={(e)=>setStoreDraft(d=>({...d, lat:Number(e.target.value)}))} />
                       ) : s.lat}
                     </td>
                     <td className="px-2 py-1 text-right">
                       {editingStoreId === s.id ? (
-                        <Input value={String(storeDraft.lng ?? s.lng)} onChange={(e)=>setStoreDraft(d=>({...d, lng:e.target.value}))} />
+                        <Input value={String(storeDraft.lng ?? s.lng)} onChange={(e)=>setStoreDraft(d=>({...d, lng:Number(e.target.value)}))} />
                       ) : s.lng}
                     </td>
                     <td className="px-2 py-1 text-center">
