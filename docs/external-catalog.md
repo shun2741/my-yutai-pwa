@@ -6,7 +6,7 @@
 
 本アプリ側の設定
 - GitHub Actions → Variables に `CATALOG_BASE` を追加
-  - 値例: `https://<your-user>.github.io/yutai-catalog/dist`
+  - 値例: `https://<your-user>.github.io/yutai-catalog`
 - 既にワークフローで `NEXT_PUBLIC_CATALOG_BASE: ${{ vars.CATALOG_BASE }}` をビルドに注入済み
 - 未設定なら従来通り `public/catalog` を参照
 
@@ -23,5 +23,4 @@
 - `.github/workflows/pages.yml` … 生成→Pagesデプロイ
 
 運用
-- CSVを更新 → main に push → CI が `dist/` を生成し Pages に公開 → このアプリは起動/フォーカスで同期
-
+- CSVを更新 → main に push → CI が `dist/` を生成し Pages に公開（公開URLのルート直下に配置されます）→ このアプリは起動/フォーカスで同期

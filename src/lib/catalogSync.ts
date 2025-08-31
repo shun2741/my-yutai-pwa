@@ -13,13 +13,30 @@ function baseUrl() {
 
 export async function syncCatalog(): Promise<boolean> {
   try {
-    const res = await fetch(`${baseUrl()}/catalog-manifest.json`, { cache: "no-store" });
-    if (!res.ok) return false;
-    const manifest = (await res.json()) as CatalogManifest;
+    const b = baseUrl();
+    // First try as-is. If not found, try with/without trailing /dist for robustness.
+    const tried: string[] = [];
+    const candidates = [
+      `${b}/catalog-manifest.json`,
+      b.endsWith('/dist') ? `${b.replace(/\/dist$/, '')}/catalog-manifest.json` : `${b}/dist/catalog-manifest.json`,
+    ];
+    let manifest: CatalogManifest | null = null;
+    let baseUsed: string | null = null;
+    for (const url of candidates) {
+      if (tried.includes(url)) continue;
+      tried.push(url);
+      const res = await fetch(url, { cache: 'no-store' });
+      if (res.ok) {
+        manifest = (await res.json()) as CatalogManifest;
+        baseUsed = url.replace(/\/catalog-manifest\.json$/, '');
+        break;
+      }
+    }
+    if (!manifest || !baseUsed) return false;
     const meta = (await getCatalogMeta()) || {};
     if (meta.hash === manifest.hash) return false; // 変更なし
 
-    const resData = await fetch(`${baseUrl()}/${manifest.url}`, { cache: "no-store" });
+    const resData = await fetch(`${baseUsed}/${manifest.url}`, { cache: "no-store" });
     if (!resData.ok) return false;
     const data = (await resData.json()) as Catalog;
     await setCatalog(data);
