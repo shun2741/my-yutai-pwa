@@ -12,7 +12,7 @@ export function getCatalogBase(): string {
   return `${basePath}/catalog`;
 }
 
-export async function syncCatalog(): Promise<boolean> {
+export async function syncCatalog(opts?: { force?: boolean }): Promise<boolean> {
   try {
     const b = getCatalogBase();
     // First try as-is. If not found, try with/without trailing /dist for robustness.
@@ -35,7 +35,7 @@ export async function syncCatalog(): Promise<boolean> {
     }
     if (!manifest || !baseUsed) return false;
     const meta = (await getCatalogMeta()) || {};
-    if (meta.hash === manifest.hash) return false; // 変更なし
+    if (!opts?.force && meta.hash === manifest.hash) return false; // 変更なし（強制でなければ）
 
     const resData = await fetch(`${baseUsed}/${manifest.url}`, { cache: "no-store" });
     if (!resData.ok) return false;

@@ -65,6 +65,24 @@ export default function MapPage() {
     (async () => setCatalog(await getCatalog()))();
   }, []);
 
+  // 起動時とフォーカス時に最新へ同期してからカタログを取り直す
+  useEffect(() => {
+    let aborted = false;
+    const syncThenLoad = async () => {
+      try {
+        await syncCatalog();
+      } catch (_) {}
+      if (!aborted) setCatalog(await getCatalog());
+    };
+    syncThenLoad();
+    const onFocus = () => syncThenLoad();
+    window.addEventListener('focus', onFocus);
+    return () => {
+      aborted = true;
+      window.removeEventListener('focus', onFocus);
+    };
+  }, []);
+
   useEffect(() => {
     if (!ready || !mapRef.current) return;
 
