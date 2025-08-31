@@ -40,7 +40,9 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Install dependencies
-        run: npm ci
+        env:
+          HUSKY: 0
+        run: npm ci --ignore-scripts
 
       - name: Build catalog from CSV
         run: npm run catalog:build
@@ -54,6 +56,7 @@ jobs:
           NEXT_PUBLIC_CATALOG_BASE: ${{ vars.CATALOG_BASE }}
           # Service Worker バージョン（キャッシュ名）に GitHub SHA を埋め込み、毎デプロイ更新
           NEXT_PUBLIC_SW_VERSION: ${{ github.sha }}
+          HUSKY: 0
         run: npm run build
 
       - name: Setup Pages
