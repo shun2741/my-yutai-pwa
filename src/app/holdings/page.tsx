@@ -35,6 +35,7 @@ export default function HoldingsPage() {
   const [form, setForm] = useState<FormState>({ companyId: "", companyName: "", voucherType: "食事", expiry: "" });
   const [companyNames, setCompanyNames] = useState<string[]>([]);
   const [nameToId, setNameToId] = useState<Record<string, string>>({});
+  const [nameToVoucher, setNameToVoucher] = useState<Record<string, VoucherType | undefined>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [toast, setToast] = useState<string | null>(null);
 
@@ -55,8 +56,16 @@ export default function HoldingsPage() {
       if (c?.companies) {
         setCompanyNames(c.companies.map((x) => x.name));
         const map: Record<string, string> = {};
+        const vmap: Record<string, VoucherType | undefined> = {};
         for (const comp of c.companies) map[comp.name] = comp.id;
+        // 会社に紐づく券種（先頭を代表値として採用）
+        const KNOWN: VoucherType[] = ["食事", "金券", "割引", "その他"];
+        for (const comp of c.companies) {
+          const first = (comp.voucherTypes || []).find((t) => KNOWN.includes(t as VoucherType)) as VoucherType | undefined;
+          if (first) vmap[comp.name] = first;
+        }
         setNameToId(map);
+        setNameToVoucher(vmap);
       }
     })();
   }, []);
@@ -163,19 +172,20 @@ export default function HoldingsPage() {
                 valueLabel={form.companyName}
                 placeholder="例: デモフーズ"
                 onChange={(label) => {
-                  setForm((f) => ({ ...f, companyName: label, companyId: nameToId[label] || "" }));
+                  const vt = nameToVoucher[label] || form.voucherType;
+                  setForm((f) => ({ ...f, companyName: label, companyId: nameToId[label] || "", voucherType: vt }));
                   setErrors((e) => ({ ...e, companyName: "" }));
                 }}
               />
               {errors.companyName && <p className="mt-1 text-xs text-red-600">{errors.companyName}</p>}
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">カタログに存在する会社名のみ選択できます。</p>
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">カタログに存在する会社名のみ選択できます。券種は会社のカタログから自動設定されます（未定義なら変更可）。</p>
             </div>
             <div>
               <Label>会社ID（自動）</Label>
               <Input value={form.companyId} readOnly placeholder="会社名から自動設定" aria-readonly="true" />
             </div>
             <div className="flex flex-col gap-1">
-              <Label>券種</Label>
+              <Label>券種（会社から自動設定。必要なら変更可）</Label>
               <Segmented
                 options={VOUCHER_TYPES.map((v) => ({ label: iconOf(v) + " " + v, value: v }))}
                 value={form.voucherType}
@@ -183,32 +193,32 @@ export default function HoldingsPage() {
               />
             </div>
             <div>
-              <Label>期限</Label>
-              <Input required aria-invalid={!!errors.expiry} type="date" value={form.expiry} onChange={(e) => { setForm({ ...form, expiry: e.target.value }); setErrors((er) => ({ ...er, expiry: "" })); }} />
-              <div className="mt-1 flex flex-wrap gap-2 text-xs">
-                <button type="button" className="rounded-md border px-2 py-1 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"
+              <Label>期限（年月を選択 → 月末に設定）</Label>
+              <div className="flex items-center gap-2">
+                <Input type="month" value={form.expiry ? form.expiry.slice(0,7) : ""}
+                       onChange={(e) => {
+                         const ym = e.target.value; // YYYY-MM
+                         if (!ym) { setForm({ ...form, expiry: "" }); return; }
+                         const [y,m] = ym.split('-').map(Number);
+                         const last = new Date(y, m, 0);
+                         const v = `${last.getFullYear()}-${String(last.getMonth()+1).padStart(2,'0')}-${String(last.getDate()).padStart(2,'0')}`;
+                         setForm({ ...form, expiry: v });
+                         setErrors((er) => ({ ...er, expiry: "" }));
+                       }} />
+                <button type="button" className="rounded-md border px-2 py-1 text-xs hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"
                         onClick={() => {
                           const d = new Date();
-                          const last = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+                          const last = new Date(d.getFullYear(), d.getMonth() + 6 + 1, 0); // +6ヶ月の月末
                           setForm(f => ({ ...f, expiry: `${last.getFullYear()}-${String(last.getMonth()+1).padStart(2,'0')}-${String(last.getDate()).padStart(2,'0')}` }));
-                          setErrors(er => ({ ...er, expiry: "" }));
-                        }}>今月末</button>
-                <button type="button" className="rounded-md border px-2 py-1 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"
+                        }}>＋6ヶ月末</button>
+                <button type="button" className="rounded-md border px-2 py-1 text-xs hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"
                         onClick={() => {
                           const d = new Date();
-                          const last = new Date(d.getFullYear(), d.getMonth() + 2, 0);
+                          const last = new Date(d.getFullYear(), d.getMonth() + 12 + 1, 0); // +12ヶ月の月末
                           setForm(f => ({ ...f, expiry: `${last.getFullYear()}-${String(last.getMonth()+1).padStart(2,'0')}-${String(last.getDate()).padStart(2,'0')}` }));
-                          setErrors(er => ({ ...er, expiry: "" }));
-                        }}>来月末</button>
-                <button type="button" className="rounded-md border px-2 py-1 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"
-                        onClick={() => {
-                          if (!form.expiry) return;
-                          const base = new Date(form.expiry + 'T00:00:00');
-                          const last = new Date(base.getFullYear(), base.getMonth() + 1, 0);
-                          setForm(f => ({ ...f, expiry: `${last.getFullYear()}-${String(last.getMonth()+1).padStart(2,'0')}-${String(last.getDate()).padStart(2,'0')}` }));
-                          setErrors(er => ({ ...er, expiry: "" }));
-                        }}>その月の月末にする</button>
+                        }}>＋12ヶ月末</button>
               </div>
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">選択した年月の月末日に自動設定されます。必要なら後から日付調整してください。</p>
               {errors.expiry && <p className="mt-1 text-xs text-red-600">{errors.expiry}</p>}
             </div>
             <div>
