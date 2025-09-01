@@ -185,6 +185,30 @@ export default function HoldingsPage() {
             <div>
               <Label>期限</Label>
               <Input required aria-invalid={!!errors.expiry} type="date" value={form.expiry} onChange={(e) => { setForm({ ...form, expiry: e.target.value }); setErrors((er) => ({ ...er, expiry: "" })); }} />
+              <div className="mt-1 flex flex-wrap gap-2 text-xs">
+                <button type="button" className="rounded-md border px-2 py-1 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"
+                        onClick={() => {
+                          const d = new Date();
+                          const last = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+                          setForm(f => ({ ...f, expiry: `${last.getFullYear()}-${String(last.getMonth()+1).padStart(2,'0')}-${String(last.getDate()).padStart(2,'0')}` }));
+                          setErrors(er => ({ ...er, expiry: "" }));
+                        }}>今月末</button>
+                <button type="button" className="rounded-md border px-2 py-1 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"
+                        onClick={() => {
+                          const d = new Date();
+                          const last = new Date(d.getFullYear(), d.getMonth() + 2, 0);
+                          setForm(f => ({ ...f, expiry: `${last.getFullYear()}-${String(last.getMonth()+1).padStart(2,'0')}-${String(last.getDate()).padStart(2,'0')}` }));
+                          setErrors(er => ({ ...er, expiry: "" }));
+                        }}>来月末</button>
+                <button type="button" className="rounded-md border px-2 py-1 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"
+                        onClick={() => {
+                          if (!form.expiry) return;
+                          const base = new Date(form.expiry + 'T00:00:00');
+                          const last = new Date(base.getFullYear(), base.getMonth() + 1, 0);
+                          setForm(f => ({ ...f, expiry: `${last.getFullYear()}-${String(last.getMonth()+1).padStart(2,'0')}-${String(last.getDate()).padStart(2,'0')}` }));
+                          setErrors(er => ({ ...er, expiry: "" }));
+                        }}>その月の月末にする</button>
+              </div>
               {errors.expiry && <p className="mt-1 text-xs text-red-600">{errors.expiry}</p>}
             </div>
             <div>

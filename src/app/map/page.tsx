@@ -283,11 +283,6 @@ export default function MapPage() {
               )}
             </div>
             <div className="text-sm text-gray-600 dark:text-gray-400 self-center">表示件数: {filteredStores.length} 件</div>
-            <Button className="w-full" variant="outline" onClick={() => {
-              if (!mapInstanceRef.current || filteredStores.length === 0) return;
-              const b = L.latLngBounds(filteredStores.map((s) => [s.lat, s.lng]));
-              mapInstanceRef.current.fitBounds(b.pad(0.1));
-            }}>全件にズーム</Button>
             <Button className="w-full" variant="outline" onClick={goToMyLocation}>現在地へ移動</Button>
             <Button className="w-full" variant="outline" onClick={() => {
               // 条件リセット
@@ -301,12 +296,6 @@ export default function MapPage() {
                 mapInstanceRef.current.fitBounds(b.pad(0.1));
               }
             }}>条件リセット</Button>
-            <Button className="w-full" onClick={async () => {
-              const updated = await syncCatalog();
-              const cat = await getCatalog();
-              setCatalog(cat);
-              setToast(updated ? 'カタログを同期しました' : 'カタログは最新です');
-            }}>最新カタログ同期</Button>
           </div>
           <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">駅検索はOpenStreetMapのNominatimを利用します。</p>
         </CardBody>
