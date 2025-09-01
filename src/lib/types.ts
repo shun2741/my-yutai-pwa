@@ -1,4 +1,4 @@
-export type VoucherType = "食事" | "金券" | "割引" | "その他";
+export type VoucherType = "食事" | "買い物" | "レジャー" | "その他";
 
 export type Holding = {
   id: string;
@@ -63,4 +63,3 @@ export type BackupJson = {
 };
 
 export const SCHEMA_VERSION = 1;
-

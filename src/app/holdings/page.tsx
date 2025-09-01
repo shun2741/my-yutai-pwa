@@ -16,7 +16,7 @@ function uuid() {
   return crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
 
-const VOUCHER_TYPES: VoucherType[] = ["食事", "金券", "割引", "その他"];
+const VOUCHER_TYPES: VoucherType[] = ["食事", "買い物", "レジャー", "その他"];
 
 type FormState = {
   id?: string;
@@ -34,7 +34,7 @@ export default function HoldingsPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>({ companyId: "", companyName: "", voucherType: "食事", expiry: "" });
   const [companyNames, setCompanyNames] = useState<string[]>([]);
-  const [nameToId, setNameToId] = useState<Record<string, string>>({});
+  const [nameToCode, setNameToCode] = useState<Record<string, string>>({});
   const [nameToVoucher, setNameToVoucher] = useState<Record<string, VoucherType | undefined>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [toast, setToast] = useState<string | null>(null);
@@ -57,14 +57,14 @@ export default function HoldingsPage() {
         setCompanyNames(c.companies.map((x) => x.name));
         const map: Record<string, string> = {};
         const vmap: Record<string, VoucherType | undefined> = {};
-        for (const comp of c.companies) map[comp.name] = comp.id;
+        for (const comp of c.companies) map[comp.name] = comp.ticker || "";
         // 会社に紐づく券種（先頭を代表値として採用）
-        const KNOWN: VoucherType[] = ["食事", "金券", "割引", "その他"];
+        const KNOWN: VoucherType[] = ["食事", "買い物", "レジャー", "その他"];
         for (const comp of c.companies) {
           const first = (comp.voucherTypes || []).find((t) => KNOWN.includes(t as VoucherType)) as VoucherType | undefined;
           if (first) vmap[comp.name] = first;
         }
-        setNameToId(map);
+        setNameToCode(map);
         setNameToVoucher(vmap);
       }
     })();
@@ -88,10 +88,10 @@ export default function HoldingsPage() {
     switch (v) {
       case "食事":
         return "🍽️";
-      case "金券":
-        return "💴";
-      case "割引":
-        return "🏷️";
+      case "買い物":
+        return "🛍️";
+      case "レジャー":
+        return "🎟️";
       default:
         return "🧾";
     }
@@ -100,9 +100,9 @@ export default function HoldingsPage() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     const newErrors: Record<string, string> = {};
-    const resolvedId = nameToId[form.companyName];
+    const resolvedId = nameToCode[form.companyName];
     if (!form.companyName) newErrors.companyName = "会社名は必須です";
-    if (!resolvedId) newErrors.companyName = "会社名がカタログに存在しません";
+    // 証券コードは未設定でも可（カタログ上コードがない会社も許容）
     if (!form.expiry) newErrors.expiry = "期限は必須です";
     if (form.amount != null && form.amount < 0) newErrors.amount = "0以上を入力してください";
     if (form.shares != null && form.shares < 0) newErrors.shares = "0以上を入力してください";
@@ -173,16 +173,16 @@ export default function HoldingsPage() {
                 placeholder="例: デモフーズ"
                 onChange={(label) => {
                   const vt = nameToVoucher[label] || form.voucherType;
-                  setForm((f) => ({ ...f, companyName: label, companyId: nameToId[label] || "", voucherType: vt }));
+                  setForm((f) => ({ ...f, companyName: label, companyId: nameToCode[label] || "", voucherType: vt }));
                   setErrors((e) => ({ ...e, companyName: "" }));
                 }}
               />
               {errors.companyName && <p className="mt-1 text-xs text-red-600">{errors.companyName}</p>}
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">カタログに存在する会社名のみ選択できます。券種は会社のカタログから自動設定されます（未定義なら変更可）。</p>
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">カタログに存在する会社名のみ選択できます。証券コードは自動設定、券種は会社のカタログから自動設定されます（未定義なら変更可）。</p>
             </div>
             <div>
-              <Label>会社ID（自動）</Label>
-              <Input value={form.companyId} readOnly placeholder="会社名から自動設定" aria-readonly="true" />
+              <Label>証券コード（自動）</Label>
+              <Input value={form.companyId} readOnly placeholder="会社名から自動設定（未設定でも可）" aria-readonly="true" />
             </div>
             <div className="flex flex-col gap-1">
               <Label>券種（会社から自動設定。必要なら変更可）</Label>

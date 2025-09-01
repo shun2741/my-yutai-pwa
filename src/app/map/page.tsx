@@ -27,7 +27,7 @@ export default function MapPage() {
   // フィルタ状態（チェーンのみ + 所有優待）
   const [selectedChainId, setSelectedChainId] = useState<string>("");
   const [showOwnedOnly, setShowOwnedOnly] = useState<boolean>(false);
-  const [ownedCompanyIds, setOwnedCompanyIds] = useState<string[]>([]);
+  const [ownedCompanyCodes, setOwnedCompanyCodes] = useState<string[]>([]);
   // 駅検索（中心移動のみ）
   const [stationQuery, setStationQuery] = useState<string>("");
   const [stationResults, setStationResults] = useState<Array<{ name: string; lat: number; lng: number }>>([]);
@@ -53,15 +53,19 @@ export default function MapPage() {
     if (selectedChainId) {
       stores = stores.filter((s) => s.chainId === selectedChainId);
     }
-    if (showOwnedOnly && ownedCompanyIds.length > 0) {
+    if (showOwnedOnly && ownedCompanyCodes.length > 0) {
       stores = stores.filter((s) => {
         const ch = chainMap[s.chainId];
         if (!ch) return false;
-        return (ch.companyIds || []).some((id) => ownedCompanyIds.includes(id));
+        // chain.companyIds は内部ID。companies から ticker に変換して照合
+        const ids = ch.companyIds || [];
+        const idToTicker: Record<string, string> = {};
+        (catalog?.companies || []).forEach(c => { idToTicker[c.id] = c.ticker || ""; });
+        return ids.map(id => idToTicker[id]).some(tk => tk && ownedCompanyCodes.includes(tk));
       });
     }
     return stores;
-  }, [catalog, selectedChainId, showOwnedOnly, ownedCompanyIds, chainMap]);
+  }, [catalog, selectedChainId, showOwnedOnly, ownedCompanyCodes, chainMap]);
 
   useEffect(() => {
     (async () => setCatalog(await getCatalog()))();
@@ -231,15 +235,15 @@ export default function MapPage() {
     updateCenterOverlay();
   }
 
-  // 所有優待の会社IDをロード
+  // 所有優待の証券コードをロード
   useEffect(() => {
     (async () => {
       try {
         const hs = await listHoldings();
-        const ids = Array.from(new Set(hs.map((h) => h.companyId).filter(Boolean)));
-        setOwnedCompanyIds(ids);
+        const codes = Array.from(new Set(hs.map((h) => h.companyId).filter(Boolean)));
+        setOwnedCompanyCodes(codes);
       } catch (_) {
-        setOwnedCompanyIds([]);
+        setOwnedCompanyCodes([]);
       }
     })();
   }, []);
