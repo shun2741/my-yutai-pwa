@@ -1,0 +1,50 @@
+name: Render Promo Video
+
+on:
+  workflow_dispatch:
+    inputs:
+      site_url:
+        description: "Base URL to capture (e.g., https://<user>.github.io/my-yutai-pwa)"
+        required: true
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  render:
+    if: ${{ github.event_name == 'workflow_dispatch' || vars.VIDEO_AUTO == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        env:
+          HUSKY: 0
+        run: |
+          npm ci --ignore-scripts
+          npx playwright install --with-deps chromium
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Capture screenshots
+        env:
+          SITE_URL: ${{ github.event.inputs.site_url || vars.SITE_URL }}
+        run: npm run video:capture
+
+      - name: Render videos (16:9 & 9:16)
+        run: npm run video:render
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: yutaigo-videos
+          path: scripts/video/dist/*.mp4
+
