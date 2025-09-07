@@ -3,7 +3,7 @@
 import Script from "next/script";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getCatalog, listHoldings } from "../../lib/db";
-import { Catalog, CatalogChain, CatalogCompany } from "../../lib/types";
+import { Catalog, CatalogChain, CatalogCompany, VoucherType } from "../../lib/types";
 import Card, { CardBody } from "../../components/ui/Card";
 import Button from "../../components/ui/Button";
 import { Input, Label, Select } from "../../components/ui/Input";
@@ -24,8 +24,9 @@ export default function MapPage() {
   const mapInstanceRef = useRef<any | null>(null);
   const [toast, setToast] = useState<string | null>(null);
 
-  // フィルタ状態（チェーンのみ + 所有優待）
-  const [selectedChainId, setSelectedChainId] = useState<string>("");
+  // フィルタ状態（チェーン複数 + 所有優待 + 券種）
+  const [selectedChainIds, setSelectedChainIds] = useState<string[]>([]);
+  const [selectedVoucherTypes, setSelectedVoucherTypes] = useState<VoucherType[]>([]);
   const [showOwnedOnly, setShowOwnedOnly] = useState<boolean>(false);
   const [ownedCompanyCodes, setOwnedCompanyCodes] = useState<string[]>([]);
   // 駅検索（中心移動のみ）
@@ -50,8 +51,18 @@ export default function MapPage() {
 
   const filteredStores = useMemo(() => {
     let stores = catalog?.stores || [];
-    if (selectedChainId) {
-      stores = stores.filter((s) => s.chainId === selectedChainId);
+    if (selectedChainIds.length > 0) {
+      const set = new Set(selectedChainIds);
+      stores = stores.filter((s) => set.has(s.chainId));
+    }
+    if (selectedVoucherTypes.length > 0) {
+      const sv = new Set(selectedVoucherTypes);
+      stores = stores.filter((s) => {
+        const ch = chainMap[s.chainId];
+        if (!ch) return false;
+        const vs = ch.voucherTypes || [];
+        return vs.some((t) => sv.has(t as VoucherType));
+      });
     }
     if (showOwnedOnly && ownedCompanyCodes.length > 0) {
       stores = stores.filter((s) => {
@@ -65,7 +76,7 @@ export default function MapPage() {
       });
     }
     return stores;
-  }, [catalog, selectedChainId, showOwnedOnly, ownedCompanyCodes, chainMap]);
+  }, [catalog, selectedChainIds, selectedVoucherTypes, showOwnedOnly, ownedCompanyCodes, chainMap]);
 
   useEffect(() => {
     (async () => setCatalog(await getCatalog()))();
@@ -256,11 +267,26 @@ export default function MapPage() {
         <CardBody>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3 items-end">
             <div className="w-full">
-              <Label>チェーン</Label>
-              <Select value={selectedChainId} onChange={(e) => setSelectedChainId(e.target.value)}>
-                <option value="">すべて</option>
+              <Label>チェーン（複数選択可）</Label>
+              <Select multiple size={5} value={selectedChainIds}
+                      onChange={(e) => {
+                        const opts = Array.from(e.target.selectedOptions).map(o => o.value);
+                        setSelectedChainIds(opts);
+                      }}>
                 {chains.map((c) => (
                   <option key={c.id} value={c.id}>{c.displayName}</option>
+                ))}
+              </Select>
+            </div>
+            <div className="w-full">
+              <Label>券種（複数選択可）</Label>
+              <Select multiple size={4} value={selectedVoucherTypes as string[]}
+                      onChange={(e) => {
+                        const opts = Array.from(e.target.selectedOptions).map(o => o.value as VoucherType);
+                        setSelectedVoucherTypes(opts);
+                      }}>
+                {(["食事","買い物","レジャー","その他"] as VoucherType[]).map(v => (
+                  <option key={v} value={v}>{v}</option>
                 ))}
               </Select>
             </div>
@@ -290,7 +316,8 @@ export default function MapPage() {
             <Button className="w-full" variant="outline" onClick={goToMyLocation}>現在地へ移動</Button>
             <Button className="w-full" variant="outline" onClick={() => {
               // 条件リセット
-              setSelectedChainId("");
+              setSelectedChainIds([]);
+              setSelectedVoucherTypes([]);
               setShowOwnedOnly(false);
               setSelectedStation(null);
               setStationQuery("");

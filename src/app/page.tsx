@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { deleteHolding, listHoldings } from "../lib/db";
-import { Holding } from "../lib/types";
+import { deleteHolding, getCatalog, listHoldings } from "../lib/db";
+import { Catalog, Holding } from "../lib/types";
 import { syncCatalog } from "../lib/catalogSync";
 import Card, { CardBody } from "../components/ui/Card";
 import Badge from "../components/ui/Badge";
@@ -14,9 +14,14 @@ export default function Page() {
   const [toast, setToast] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<Partial<Holding>>({});
+  const [catalog, setCatalog] = useState<Catalog | undefined>();
 
   useEffect(() => {
     (async () => setHoldings(await listHoldings()))();
+  }, []);
+
+  useEffect(() => {
+    (async () => setCatalog(await getCatalog()))();
   }, []);
 
   useEffect(() => {
@@ -78,7 +83,12 @@ export default function Page() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="text-base font-semibold">{h.companyName} <span className="text-sm font-normal text-gray-500">（{h.voucherType}）</span></div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">期限: {h.expiry} {h.amount != null ? ` / 残額: ${h.amount}円` : ""}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">期限: {h.expiry} {h.amount != null ? ` / 残額: ${h.amount}円` : h.count != null ? ` / 券数: ${h.count}枚` : ""}</div>
+                  {(() => {
+                    const comp = (catalog?.companies || []).find(c => (c.ticker && c.ticker === h.companyId) || c.name === h.companyName);
+                    if (comp?.url) return <a className="text-xs text-blue-600 hover:underline" href={comp.url} target="_blank" rel="noreferrer">公式サイト</a>;
+                    return null;
+                  })()}
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge color={(() => { const d = Math.max(0, daysUntil(h.expiry)); return d < 30 ? "red" : d < 90 ? "yellow" : "gray"; })()}>

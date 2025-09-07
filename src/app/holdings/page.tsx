@@ -25,6 +25,7 @@ type FormState = {
   voucherType: VoucherType;
   expiry: string;
   amount?: number;
+  count?: number;
   shares?: number;
   note?: string;
 };
@@ -36,6 +37,8 @@ export default function HoldingsPage() {
   const [companyNames, setCompanyNames] = useState<string[]>([]);
   const [nameToCode, setNameToCode] = useState<Record<string, string>>({});
   const [nameToVoucher, setNameToVoucher] = useState<Record<string, VoucherType | undefined>>({});
+  const [nameToUrl, setNameToUrl] = useState<Record<string, string>>({});
+  const [codeToUrl, setCodeToUrl] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [toast, setToast] = useState<string | null>(null);
 
@@ -57,15 +60,21 @@ export default function HoldingsPage() {
         setCompanyNames(c.companies.map((x) => x.name));
         const map: Record<string, string> = {};
         const vmap: Record<string, VoucherType | undefined> = {};
+        const n2u: Record<string, string> = {};
+        const c2u: Record<string, string> = {};
         for (const comp of c.companies) map[comp.name] = comp.ticker || "";
         // 会社に紐づく券種（先頭を代表値として採用）
         const KNOWN: VoucherType[] = ["食事", "買い物", "レジャー", "その他"];
         for (const comp of c.companies) {
           const first = (comp.voucherTypes || []).find((t) => KNOWN.includes(t as VoucherType)) as VoucherType | undefined;
           if (first) vmap[comp.name] = first;
+          if (comp.url) n2u[comp.name] = comp.url;
+          if (comp.ticker && comp.url) c2u[comp.ticker] = comp.url;
         }
         setNameToCode(map);
         setNameToVoucher(vmap);
+        setNameToUrl(n2u);
+        setCodeToUrl(c2u);
       }
     })();
   }, []);
@@ -106,6 +115,7 @@ export default function HoldingsPage() {
     if (!form.expiry) newErrors.expiry = "期限は必須です";
     if (form.amount != null && form.amount < 0) newErrors.amount = "0以上を入力してください";
     if (form.shares != null && form.shares < 0) newErrors.shares = "0以上を入力してください";
+    if (form.count != null && form.count < 0) newErrors.count = "0以上を入力してください";
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
     const now = Date.now();
@@ -116,6 +126,7 @@ export default function HoldingsPage() {
       voucherType: form.voucherType,
       expiry: form.expiry,
       amount: form.amount ? Number(form.amount) : undefined,
+      count: form.count ? Number(form.count) : undefined,
       shares: form.shares ? Number(form.shares) : undefined,
       note: form.note || undefined,
       createdAt: form.id ? items.find(i => i.id === form.id)?.createdAt || now : now,
@@ -230,6 +241,12 @@ export default function HoldingsPage() {
               {errors.amount && <p className="mt-1 text-xs text-red-600">{errors.amount}</p>}
             </div>
             <div>
+              <Label>券数</Label>
+              <Input type="number" min={0} value={form.count ?? ""} onChange={(e) => setForm({ ...form, count: e.target.value === "" ? undefined : Number(e.target.value) })} />
+              {errors.count && <p className="mt-1 text-xs text-red-600">{errors.count}</p>}
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">金額の代わりに枚数で管理したい場合に入力（併用可）。</p>
+            </div>
+            <div>
               <Label>株数</Label>
               <Input aria-invalid={!!errors.shares} type="number" min={0} value={form.shares ?? ""} onChange={(e) => { setForm({ ...form, shares: e.target.value === "" ? undefined : Number(e.target.value) }); setErrors((er) => ({ ...er, shares: "" })); }} />
               {errors.shares && <p className="mt-1 text-xs text-red-600">{errors.shares}</p>}
@@ -255,7 +272,12 @@ export default function HoldingsPage() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="text-base font-semibold">{h.companyName} <span className="text-sm font-normal text-gray-500">（{h.voucherType}）</span></div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">期限: {h.expiry} {h.amount != null ? ` / 残額: ${h.amount}円` : ""}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">期限: {h.expiry} {h.amount != null ? ` / 残額: ${h.amount}円` : h.count != null ? ` / 券数: ${h.count}枚` : ""}</div>
+                  {(() => {
+                    const url = nameToUrl[h.companyName] || (h.companyId ? codeToUrl[h.companyId] : "");
+                    if (url) return <a className="text-xs text-blue-600 hover:underline" href={url} target="_blank" rel="noreferrer">公式サイト</a>;
+                    return null;
+                  })()}
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge color={(() => { const d = Math.max(0, daysUntil(h.expiry)); return d < 30 ? "red" : d < 90 ? "yellow" : "gray"; })()}>

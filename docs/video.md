@@ -47,3 +47,13 @@ npm run video:render
 - シーン配分（秒数）やテキストは `scripts/video/render.mjs` の `build()` 内を編集
 - 9:16 は別レンダリングで最適化しています（1080x1920）。画面キャプチャは同一でもOK
 
+## クイック検証（短い動画）
+- 一括で短尺・低解像度の出力（数秒で完了）
+```
+SITE_URL=https://<user>.github.io/my-yutai-pwa npm run video:quick
+```
+- 仕組み: 環境変数で秒数・解像度・生成比率を制御しています
+  - `QUICK=1` … 各シーンの秒数を短縮（Title=1, Home=2, Map=2, Holdings=2, CTA=1）
+  - `SIZE_16X9=854x480` … 16:9 の出力解像度を変更（任意）
+  - `SKIP_9X16=1` … 9:16 の出力をスキップ（任意）
+  - 個別調整: `DUR_TITLE/DUR_HOME/DUR_MAP/DUR_HOLDINGS/DUR_CTA` を秒で指定

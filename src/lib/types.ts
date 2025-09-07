@@ -7,6 +7,7 @@ export type Holding = {
   voucherType: VoucherType;
   expiry: string; // YYYY-MM-DD
   amount?: number; // 円換算の残額
+  count?: number; // 優待券の枚数など
   shares?: number;
   note?: string;
   createdAt: number; // epoch ms
@@ -17,6 +18,7 @@ export type CatalogCompany = {
   id: string;
   name: string;
   ticker?: string;
+  url?: string;
   chainIds: string[];
   voucherTypes: string[];
   notes?: string;
