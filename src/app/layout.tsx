@@ -26,7 +26,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-dvh bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-50">
         <nav className="sticky top-0 z-40 flex items-center gap-3 border-b border-gray-200 bg-white/70 px-4 py-3 backdrop-blur dark:border-gray-800 dark:bg-gray-900/70">
           <div className="flex-1">
-            <Link href="/" className="font-semibold">YutaiGO</Link>
+            <Link href="/" className="inline-flex items-center gap-2 font-semibold">
+              <img src="/brand/logo-yutaigo.svg" alt="YutaiGO" className="h-7 w-auto" />
+              <span className="sr-only">YutaiGO</span>
+            </Link>
           </div>
           <div className="flex items-center gap-2">
             <Link href="/" className="rounded-md px-2 py-1 text-sm hover:bg-gray-100 dark:hover:bg-gray-800">ホーム</Link>
