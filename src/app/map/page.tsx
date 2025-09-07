@@ -136,8 +136,12 @@ export default function MapPage() {
       poiLayerRef.current = L.layerGroup().addTo(map);
 
       // ナビゲーション遷移後にコンテナサイズが確定していない場合の描画崩れ対策
-      try { setTimeout(() => map.invalidateSize(), 0); } catch (_) {}
+      try {
+        setTimeout(() => { map.invalidateSize(); updateVisibleList(); }, 0);
+        setTimeout(() => updateVisibleList(), 300);
+      } catch (_) {}
       map.on('moveend', () => updateVisibleList());
+      map.on('zoomend', () => updateVisibleList());
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -158,7 +162,7 @@ export default function MapPage() {
     const map = mapInstanceRef.current;
     if (!map) return;
     const bounds = map.getBounds();
-    const list = (filteredStores || []).filter((s) => bounds.contains([s.lat, s.lng]));
+    const list = (filteredStores || []).filter((s) => bounds.contains((L as any).latLng(s.lat, s.lng)));
     const c = map.getCenter();
     list.sort((a, b) => Math.hypot(a.lat - c.lat, a.lng - c.lng) - Math.hypot(b.lat - c.lat, b.lng - c.lng));
     setVisibleStores(list);
