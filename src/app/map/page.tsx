@@ -3,7 +3,7 @@
 import Script from "next/script";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getCatalog, listHoldings } from "../../lib/db";
-import { Catalog, CatalogChain, CatalogCompany, VoucherType } from "../../lib/types";
+import { Catalog, CatalogChain, CatalogCompany, CatalogStore, VoucherType } from "../../lib/types";
 import Card, { CardBody } from "../../components/ui/Card";
 import Button from "../../components/ui/Button";
 import { Input, Label, Select } from "../../components/ui/Input";
@@ -23,6 +23,7 @@ export default function MapPage() {
   const storeLayerRef = useRef<any | null>(null);
   const mapInstanceRef = useRef<any | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [visibleStores, setVisibleStores] = useState<CatalogStore[]>([]);
 
   // フィルタ状態（チェーン複数 + 所有優待 + 券種）
   const [selectedChainIds, setSelectedChainIds] = useState<string[]>([]);
@@ -136,6 +137,7 @@ export default function MapPage() {
 
       // ナビゲーション遷移後にコンテナサイズが確定していない場合の描画崩れ対策
       try { setTimeout(() => map.invalidateSize(), 0); } catch (_) {}
+      map.on('moveend', () => updateVisibleList());
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -152,6 +154,16 @@ export default function MapPage() {
     };
   }, []);
 
+  function updateVisibleList() {
+    const map = mapInstanceRef.current;
+    if (!map) return;
+    const bounds = map.getBounds();
+    const list = (filteredStores || []).filter((s) => bounds.contains([s.lat, s.lng]));
+    const c = map.getCenter();
+    list.sort((a, b) => Math.hypot(a.lat - c.lat, a.lng - c.lng) - Math.hypot(b.lat - c.lat, b.lng - c.lng));
+    setVisibleStores(list);
+  }
+
   // フィルタ変更やカタログ取得後にレイヤーを再構築
   useEffect(() => {
     rebuildStoreLayer();
@@ -160,6 +172,7 @@ export default function MapPage() {
       const b = L.latLngBounds(filteredStores.map((s) => [s.lat, s.lng]));
       mapInstanceRef.current.fitBounds(b.pad(0.1));
     }
+    updateVisibleList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredStores]);
 
@@ -331,11 +344,43 @@ export default function MapPage() {
           <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">駅検索はOpenStreetMapのNominatimを利用します。</p>
         </CardBody>
       </Card>
-      <Card>
-        <CardBody>
-          <div ref={mapRef} className="h-[70vh] lg:h-[78vh] w-full rounded-lg border border-gray-200 dark:border-gray-800" />
-        </CardBody>
-      </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Card>
+          <CardBody>
+            <div ref={mapRef} className="h-[70vh] w-full rounded-lg border border-gray-200 dark:border-gray-800" />
+          </CardBody>
+        </Card>
+        <Card>
+          <CardBody>
+            <div className="flex items-center justify-between mb-2">
+              <div className="text-base font-semibold">この範囲の店舗</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">{visibleStores.length} 件</div>
+            </div>
+            <div className="max-h-[70vh] overflow-y-auto divide-y divide-gray-200 dark:divide-gray-800">
+              {visibleStores.map((s) => {
+                const ch = chainMap[s.chainId];
+                const companyName = ch?.companyIds?.length ? companyMap[ch.companyIds[0]]?.name : undefined;
+                return (
+                  <div key={s.id} className="py-2">
+                    <div className="text-sm font-medium">{s.name}</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">{companyName ? companyName + ' / ' : ''}{ch?.displayName}</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-500 truncate">{s.address || ''}</div>
+                    <div className="mt-1">
+                      <Button size="sm" variant="outline" onClick={() => {
+                        if (!mapInstanceRef.current) return;
+                        mapInstanceRef.current.setView([s.lat, s.lng], Math.max(mapInstanceRef.current.getZoom(), 15));
+                      }}>地図で見る</Button>
+                    </div>
+                  </div>
+                );
+              })}
+              {visibleStores.length === 0 && (
+                <div className="text-sm text-gray-600 dark:text-gray-400 py-4">この範囲には店舗がありません。</div>
+              )}
+            </div>
+          </CardBody>
+        </Card>
+      </div>
       {/* Leaflet CDN */}
       <link
         rel="stylesheet"
