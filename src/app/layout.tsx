@@ -2,6 +2,11 @@ import './globals.css';
 import Link from 'next/link';
 import ServiceWorkerRegister from '../components/ServiceWorkerRegister';
 import ThemeToggle from '../components/ThemeToggle';
+import { Inter } from 'next/font/google';
+import { Noto_Sans_JP } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const noto = Noto_Sans_JP({ subsets: ['latin'], weight: ['400','600','700'], variable: '--font-noto' });
 
 export const metadata = {
   title: '株主優待管理アプリ YutaiGO',
@@ -10,7 +15,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ja">
+    <html lang="ja" className={`${inter.variable} ${noto.variable}`}>
       <head>
         <script
           dangerouslySetInnerHTML={{

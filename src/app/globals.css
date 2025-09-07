@@ -7,7 +7,7 @@
 }
 
 html, body { height: 100%; }
-body { @apply antialiased; margin: 0; }
+body { @apply antialiased; margin: 0; font-family: var(--font-inter), var(--font-noto), system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans JP", sans-serif; }
 
 /* 基本フォームの見た目調整 */
 input, select, textarea, button { font: inherit; }
