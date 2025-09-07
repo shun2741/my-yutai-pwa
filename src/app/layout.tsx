@@ -20,7 +20,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="manifest" href={(process.env.NEXT_PUBLIC_BASE_PATH || '') + '/manifest.webmanifest'} />
         <meta name="theme-color" content="#2563EB" />
-        <link rel="apple-touch-icon" href={(process.env.NEXT_PUBLIC_BASE_PATH || '') + '/icons/icon-192.png'} />
+        <link rel="apple-touch-icon" sizes="180x180" href={(process.env.NEXT_PUBLIC_BASE_PATH || '') + '/icons/icon-192.png'} />
+        <link rel="icon" type="image/png" sizes="32x32" href={(process.env.NEXT_PUBLIC_BASE_PATH || '') + '/icons/icon-192.png'} />
+        <link rel="icon" type="image/png" sizes="192x192" href={(process.env.NEXT_PUBLIC_BASE_PATH || '') + '/icons/icon-192.png'} />
         <script
           dangerouslySetInnerHTML={{
             __html: `try{const t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(_){}
