@@ -1,6 +1,5 @@
 import './globals.css';
 import Link from 'next/link';
-import Image from 'next/image';
 import ServiceWorkerRegister from '../components/ServiceWorkerRegister';
 import ThemeToggle from '../components/ThemeToggle';
 import { Inter } from 'next/font/google';
@@ -32,9 +31,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-dvh bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-50">
         <nav className="sticky top-0 z-40 flex items-center gap-3 border-b border-gray-200 bg-white/70 px-4 py-3 backdrop-blur dark:border-gray-800 dark:bg-gray-900/70">
           <div className="flex-1">
-            <Link href="/" className="inline-flex items-center gap-2 font-semibold">
-              <Image src="/brand/logo-yutaigo.svg" alt="YutaiGO" width={160} height={40} priority className="h-7 w-auto" />
-              <span className="sr-only">YutaiGO</span>
+            <Link href="/" className="inline-flex items-center gap-2 font-semibold text-brand-600">
+              YutaiGO
             </Link>
           </div>
           <div className="flex items-center gap-2">
