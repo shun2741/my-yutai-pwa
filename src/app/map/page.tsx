@@ -121,10 +121,21 @@ export default function MapPage() {
       }
       const map = L.map(mapRef.current).setView([center.lat, center.lng], center.zoom);
       mapInstanceRef.current = map;
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 19,
-      }).addTo(map);
+      // Tile provider: prefer Mapbox if token is provided; otherwise OSM
+      const mbToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+      const mbStyle = process.env.NEXT_PUBLIC_MAPBOX_STYLE || 'mapbox/streets-v12';
+      if (mbToken) {
+        const url = `https://api.mapbox.com/styles/v1/${mbStyle}/tiles/256/{z}/{x}/{y}@2x?access_token=${mbToken}`;
+        L.tileLayer(url, {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, © <a href="https://www.mapbox.com/about/maps/">Mapbox</a>',
+          maxZoom: 20,
+        }).addTo(map);
+      } else {
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          maxZoom: 19,
+        }).addTo(map);
+      }
 
       // 実店舗レイヤー（クラスタリング）
       const cluster = (L as any).markerClusterGroup ? (L as any).markerClusterGroup() : L.layerGroup();
