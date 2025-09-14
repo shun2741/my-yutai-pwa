@@ -1,6 +1,4 @@
 "use client";
-
-import Script from "next/script";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getCatalog, listHoldings } from "../../lib/db";
 import { Catalog, CatalogChain, CatalogCompany, CatalogStore, VoucherType } from "../../lib/types";
@@ -102,10 +100,38 @@ export default function MapPage() {
   }, []);
 
   useEffect(() => {
-    // 既に Leaflet が読み込まれているナビゲーション遷移時にも初期化できるようにする
-    if (typeof window !== 'undefined' && (window as any).L) {
-      setReady(true);
+    // Leaflet と MarkerCluster を順序保証で読み込む（モバイルでの L 未定義を防ぐ）
+    async function ensureLeaflet() {
+      if (typeof window === 'undefined') return;
+      const w: any = window as any;
+      function loadScript(src: string, attrs: Record<string, string> = {}) {
+        return new Promise<void>((resolve, reject) => {
+          const s = document.createElement('script');
+          s.src = src;
+          s.async = true;
+          for (const k of Object.keys(attrs)) s.setAttribute(k, attrs[k]);
+          s.onload = () => resolve();
+          s.onerror = () => reject(new Error(`failed to load ${src}`));
+          document.body.appendChild(s);
+        });
+      }
+      try {
+        if (!w.L) {
+          await loadScript('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', {
+            crossOrigin: '',
+            integrity: 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=',
+          });
+        }
+        if (!w.L?.markerClusterGroup) {
+          await loadScript('https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js');
+        }
+        setReady(true);
+      } catch (_) {
+        // 読み込み失敗時もOSMタイルのみで地図は動かせるように ready にする試み
+        setReady(!!(window as any).L);
+      }
     }
+    ensureLeaflet();
   }, []);
 
   useEffect(() => {
@@ -412,14 +438,6 @@ export default function MapPage() {
         rel="stylesheet"
         href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
       />
-      <Script
-        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-        crossOrigin=""
-        onLoad={() => setReady(true)}
-        strategy="afterInteractive"
-      />
-      <Script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" strategy="afterInteractive" />
     </div>
   );
 }
