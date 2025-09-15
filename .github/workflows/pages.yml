@@ -39,6 +39,19 @@ jobs:
             echo "- env.NEXT_PUBLIC_CATALOG_BASE: '$NEXT_PUBLIC_CATALOG_BASE'";
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Print mapbox vars (debug)
+        env:
+          NEXT_PUBLIC_MAPBOX_TOKEN: ${{ vars.NEXT_PUBLIC_MAPBOX_TOKEN }}
+          NEXT_PUBLIC_MAPBOX_STYLE: ${{ vars.NEXT_PUBLIC_MAPBOX_STYLE }}
+        run: |
+          echo "MAPBOX_TOKEN_SET=$([[ -n \"$NEXT_PUBLIC_MAPBOX_TOKEN\" ]] && echo yes || echo no)"
+          echo "MAPBOX_STYLE=${NEXT_PUBLIC_MAPBOX_STYLE:-mapbox/streets-v12}"
+          {
+            echo "# Mapbox debug";
+            echo "- token set: $([[ -n \"$NEXT_PUBLIC_MAPBOX_TOKEN\" ]] && echo yes || echo no)";
+            echo "- style: ${NEXT_PUBLIC_MAPBOX_STYLE:-mapbox/streets-v12}";
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Install dependencies
         env:
           HUSKY: 0
