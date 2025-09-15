@@ -148,8 +148,9 @@ export default function MapPage() {
       const map = L.map(mapRef.current).setView([center.lat, center.lng], center.zoom);
       mapInstanceRef.current = map;
       // Tile provider: prefer Mapbox if token is provided; otherwise OSM
-      const mbToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+      const mbToken = (process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '').trim();
       const mbStyle = process.env.NEXT_PUBLIC_MAPBOX_STYLE || 'mapbox/streets-v12';
+      try { console.debug('[map] MB token present:', Boolean(mbToken), 'style:', mbStyle); } catch (_) {}
       if (mbToken) {
         // Mapbox Styles API (raster tiles). Use 512px tiles and adjust zoomOffset.
         const url = `https://api.mapbox.com/styles/v1/${mbStyle}/tiles/512/{z}/{x}/{y}?access_token=${mbToken}`;
