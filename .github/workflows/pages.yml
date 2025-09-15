@@ -39,18 +39,6 @@ jobs:
             echo "- env.NEXT_PUBLIC_CATALOG_BASE: '$NEXT_PUBLIC_CATALOG_BASE'";
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Print mapbox vars (debug)
-        env:
-          NEXT_PUBLIC_MAPBOX_TOKEN: ${{ vars.NEXT_PUBLIC_MAPBOX_TOKEN }}
-          NEXT_PUBLIC_MAPBOX_STYLE: ${{ vars.NEXT_PUBLIC_MAPBOX_STYLE }}
-        run: |
-          echo "MAPBOX_TOKEN_SET=$([[ -n \"$NEXT_PUBLIC_MAPBOX_TOKEN\" ]] && echo yes || echo no)"
-          echo "MAPBOX_STYLE=${NEXT_PUBLIC_MAPBOX_STYLE:-mapbox/streets-v12}"
-          {
-            echo "# Mapbox debug";
-            echo "- token set: $([[ -n \"$NEXT_PUBLIC_MAPBOX_TOKEN\" ]] && echo yes || echo no)";
-            echo "- style: ${NEXT_PUBLIC_MAPBOX_STYLE:-mapbox/streets-v12}";
-          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Install dependencies
         env:
@@ -67,26 +55,10 @@ jobs:
           # 外部URLのカタログを参照する場合は、Actions Variables に CATALOG_BASE を設定
           # 例: https://<user>.github.io/<catalog-repo>
           NEXT_PUBLIC_CATALOG_BASE: ${{ vars.CATALOG_BASE }}
-          # Mapbox を使う場合は、Public Token を Variables に設定
-          NEXT_PUBLIC_MAPBOX_TOKEN: ${{ vars.NEXT_PUBLIC_MAPBOX_TOKEN }}
-          # 任意の Mapbox スタイル（未設定なら streets-v12）
-          NEXT_PUBLIC_MAPBOX_STYLE: ${{ vars.NEXT_PUBLIC_MAPBOX_STYLE }}
           # Service Worker バージョン（キャッシュ名）に GitHub SHA を埋め込み、毎デプロイ更新
           NEXT_PUBLIC_SW_VERSION: ${{ github.sha }}
           HUSKY: 0
-        run: |
-          echo "[before-build] MAPBOX_TOKEN_SET=$([[ -n \"$NEXT_PUBLIC_MAPBOX_TOKEN\" ]] && echo yes || echo no)"
-          echo "[before-build] MAPBOX_STYLE=${NEXT_PUBLIC_MAPBOX_STYLE:-mapbox/streets-v12}"
-          npm run build
-
-      - name: Inject runtime Mapbox config (mb-config.js)
-        env:
-          NEXT_PUBLIC_MAPBOX_TOKEN: ${{ vars.NEXT_PUBLIC_MAPBOX_TOKEN }}
-          NEXT_PUBLIC_MAPBOX_STYLE: ${{ vars.NEXT_PUBLIC_MAPBOX_STYLE }}
-        run: |
-          mkdir -p ./out
-          echo "window.__MB_TOKEN='${NEXT_PUBLIC_MAPBOX_TOKEN}'; window.__MB_STYLE='${NEXT_PUBLIC_MAPBOX_STYLE:-mapbox/streets-v12}';" > ./out/mb-config.js
-          echo "Wrote ./out/mb-config.js (length: $(wc -c < ./out/mb-config.js))"
+        run: npm run build
 
       - name: Verify static export (basePath/CSS)
         env:

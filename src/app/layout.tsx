@@ -22,15 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="apple-touch-icon" sizes="180x180" href={(process.env.NEXT_PUBLIC_BASE_PATH || '') + '/icons/icon-192.png'} />
         <link rel="icon" type="image/png" sizes="32x32" href={(process.env.NEXT_PUBLIC_BASE_PATH || '') + '/icons/icon-192.png'} />
         <link rel="icon" type="image/png" sizes="192x192" href={(process.env.NEXT_PUBLIC_BASE_PATH || '') + '/icons/icon-192.png'} />
-        {/* Expose Mapbox public config for runtime fallback (static export safe) */}
-        {process.env.NEXT_PUBLIC_MAPBOX_TOKEN ? (
-          <>
-            <meta name="mb-token" content={process.env.NEXT_PUBLIC_MAPBOX_TOKEN} />
-            <meta name="mb-style" content={process.env.NEXT_PUBLIC_MAPBOX_STYLE || 'mapbox/streets-v12'} />
-          </>
-        ) : null}
-        {/* Optional runtime config (generated into /out by CI): */}
-        <script defer src={(process.env.NEXT_PUBLIC_BASE_PATH || '') + '/mb-config.js'} />
+        {/* Map provider: OSM を利用 */}
         <script
           dangerouslySetInnerHTML={{
             __html: `try{const t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(_){}

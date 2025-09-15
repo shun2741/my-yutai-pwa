@@ -22,7 +22,7 @@ export default function MapPage() {
   const mapInstanceRef = useRef<any | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [visibleStores, setVisibleStores] = useState<CatalogStore[]>([]);
-  const [tileProvider, setTileProvider] = useState<{ name: 'mapbox' | 'osm'; style?: string } | null>(null);
+  const [tileProvider, setTileProvider] = useState<{ name: 'osm'; style?: string } | null>(null);
 
   // フィルタ状態（チェーン複数 + 所有優待 + 券種）
   const [selectedChainIds, setSelectedChainIds] = useState<string[]>([]);
@@ -149,39 +149,12 @@ export default function MapPage() {
       const map = L.map(mapRef.current).setView([center.lat, center.lng], center.zoom);
       mapInstanceRef.current = map;
       // Tile provider: prefer Mapbox if token is provided; otherwise OSM
-      let mbToken = (process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '').trim();
-      let mbStyle = process.env.NEXT_PUBLIC_MAPBOX_STYLE || 'mapbox/streets-v12';
-      if (!mbToken && typeof document !== 'undefined') {
-        const m = document.querySelector('meta[name="mb-token"]') as HTMLMetaElement | null;
-        if (m?.content) mbToken = m.content.trim();
-        const s = document.querySelector('meta[name="mb-style"]') as HTMLMetaElement | null;
-        if (s?.content) mbStyle = s.content;
-      }
-      if (!mbToken && typeof window !== 'undefined') {
-        const w: any = window as any;
-        if (typeof w.__MB_TOKEN === 'string' && w.__MB_TOKEN) mbToken = w.__MB_TOKEN;
-        if (typeof w.__MB_STYLE === 'string' && w.__MB_STYLE) mbStyle = w.__MB_STYLE;
-      }
-      try { console.log('[map] MB token present:', Boolean(mbToken), 'style:', mbStyle); } catch (_) {}
-      if (mbToken) {
-        // Mapbox Styles API (raster tiles). Use 512px tiles and adjust zoomOffset.
-        const url = `https://api.mapbox.com/styles/v1/${mbStyle}/tiles/512/{z}/{x}/{y}?access_token=${mbToken}`;
-        // Debug: indicate which tile provider is used
-        try { console.log('[map] Using Mapbox style:', mbStyle); } catch (_) {}
-        const tl = L.tileLayer(url, {
-          tileSize: 512,
-          zoomOffset: -1,
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, © <a href="https://www.mapbox.com/about/maps/">Mapbox</a>',
-          maxZoom: 20,
-        }).addTo(map);
-        setTileProvider({ name: 'mapbox', style: mbStyle });
-      } else {
-        const tl = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-          maxZoom: 19,
-        }).addTo(map);
-        setTileProvider({ name: 'osm' });
-      }
+      // OSM タイルのみを使用
+      const tl = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19,
+      }).addTo(map);
+      setTileProvider({ name: 'osm' });
 
       // 実店舗レイヤー（クラスタリング）
       const cluster = (L as any).markerClusterGroup ? (L as any).markerClusterGroup() : L.layerGroup();
