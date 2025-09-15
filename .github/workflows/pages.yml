@@ -79,6 +79,15 @@ jobs:
           echo "[before-build] MAPBOX_STYLE=${NEXT_PUBLIC_MAPBOX_STYLE:-mapbox/streets-v12}"
           npm run build
 
+      - name: Inject runtime Mapbox config (mb-config.js)
+        if: ${{ vars.NEXT_PUBLIC_MAPBOX_TOKEN != '' }}
+        env:
+          NEXT_PUBLIC_MAPBOX_TOKEN: ${{ vars.NEXT_PUBLIC_MAPBOX_TOKEN }}
+          NEXT_PUBLIC_MAPBOX_STYLE: ${{ vars.NEXT_PUBLIC_MAPBOX_STYLE }}
+        run: |
+          echo "window.__MB_TOKEN='${NEXT_PUBLIC_MAPBOX_TOKEN}'; window.__MB_STYLE='${NEXT_PUBLIC_MAPBOX_STYLE:-mapbox/streets-v12}';" > ./out/mb-config.js
+          echo "Wrote ./out/mb-config.js (length: $(wc -c < ./out/mb-config.js))"
+
       - name: Verify static export (basePath/CSS)
         env:
           NEXT_PUBLIC_BASE_PATH: /my-yutai-pwa

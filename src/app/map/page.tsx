@@ -157,6 +157,11 @@ export default function MapPage() {
         const s = document.querySelector('meta[name="mb-style"]') as HTMLMetaElement | null;
         if (s?.content) mbStyle = s.content;
       }
+      if (!mbToken && typeof window !== 'undefined') {
+        const w: any = window as any;
+        if (typeof w.__MB_TOKEN === 'string' && w.__MB_TOKEN) mbToken = w.__MB_TOKEN;
+        if (typeof w.__MB_STYLE === 'string' && w.__MB_STYLE) mbStyle = w.__MB_STYLE;
+      }
       try { console.log('[map] MB token present:', Boolean(mbToken), 'style:', mbStyle); } catch (_) {}
       if (mbToken) {
         // Mapbox Styles API (raster tiles). Use 512px tiles and adjust zoomOffset.
