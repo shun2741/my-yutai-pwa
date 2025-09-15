@@ -22,6 +22,7 @@ export default function MapPage() {
   const mapInstanceRef = useRef<any | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [visibleStores, setVisibleStores] = useState<CatalogStore[]>([]);
+  const [tileProvider, setTileProvider] = useState<{ name: 'mapbox' | 'osm'; style?: string } | null>(null);
 
   // フィルタ状態（チェーン複数 + 所有優待 + 券種）
   const [selectedChainIds, setSelectedChainIds] = useState<string[]>([]);
@@ -156,17 +157,19 @@ export default function MapPage() {
         const url = `https://api.mapbox.com/styles/v1/${mbStyle}/tiles/512/{z}/{x}/{y}?access_token=${mbToken}`;
         // Debug: indicate which tile provider is used
         try { console.debug('[map] Using Mapbox style:', mbStyle); } catch (_) {}
-        L.tileLayer(url, {
+        const tl = L.tileLayer(url, {
           tileSize: 512,
           zoomOffset: -1,
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, © <a href="https://www.mapbox.com/about/maps/">Mapbox</a>',
           maxZoom: 20,
         }).addTo(map);
+        setTileProvider({ name: 'mapbox', style: mbStyle });
       } else {
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        const tl = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
           maxZoom: 19,
         }).addTo(map);
+        setTileProvider({ name: 'osm' });
       }
 
       // 実店舗レイヤー（クラスタリング）
@@ -394,6 +397,12 @@ export default function MapPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card>
           <CardBody>
+            <div className="flex items-center justify-between mb-2">
+              <div className="text-base font-semibold">マップ</div>
+              <div className="text-xs text-gray-600 dark:text-gray-400">
+                {tileProvider?.name === 'mapbox' ? `Tiles: Mapbox (${tileProvider?.style || ''})` : 'Tiles: OpenStreetMap'}
+              </div>
+            </div>
             <div ref={mapRef} className="h-[70vh] w-full rounded-lg border border-gray-200 dark:border-gray-800" />
           </CardBody>
         </Card>
