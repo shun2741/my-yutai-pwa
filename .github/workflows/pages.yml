@@ -74,7 +74,10 @@ jobs:
           # Service Worker バージョン（キャッシュ名）に GitHub SHA を埋め込み、毎デプロイ更新
           NEXT_PUBLIC_SW_VERSION: ${{ github.sha }}
           HUSKY: 0
-        run: npm run build
+        run: |
+          echo "[before-build] MAPBOX_TOKEN_SET=$([[ -n \"$NEXT_PUBLIC_MAPBOX_TOKEN\" ]] && echo yes || echo no)"
+          echo "[before-build] MAPBOX_STYLE=${NEXT_PUBLIC_MAPBOX_STYLE:-mapbox/streets-v12}"
+          npm run build
 
       - name: Verify static export (basePath/CSS)
         env:
