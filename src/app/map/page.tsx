@@ -27,6 +27,7 @@ export default function MapPage() {
   // フィルタ状態（チェーン複数 + 所有優待 + 券種）
   const [selectedChainIds, setSelectedChainIds] = useState<string[]>([]);
   const [selectedVoucherTypes, setSelectedVoucherTypes] = useState<VoucherType[]>([]);
+  const [chainQuery, setChainQuery] = useState<string>("");
   const [showOwnedOnly, setShowOwnedOnly] = useState<boolean>(false);
   const [ownedCompanyCodes, setOwnedCompanyCodes] = useState<string[]>([]);
   // 駅検索（中心移動のみ）
@@ -37,6 +38,11 @@ export default function MapPage() {
 
   const companies: CatalogCompany[] = useMemo(() => catalog?.companies || [], [catalog]);
   const chains: CatalogChain[] = useMemo(() => catalog?.chains || [], [catalog]);
+  const filteredChainsForPicker = useMemo(() => {
+    const q = chainQuery.trim().toLowerCase();
+    if (!q) return chains;
+    return chains.filter(c => (c.displayName || "").toLowerCase().includes(q));
+  }, [chains, chainQuery]);
 
   const chainMap = useMemo(() => {
     const m: Record<string, CatalogChain> = {};
@@ -226,8 +232,14 @@ export default function MapPage() {
         <div style="font-weight:600">${s.name}</div>
         <div style="font-size:12px;color:#666">${companyName ? companyName + ' / ' : ''}${chain?.displayName || ''}</div>
         <div style="font-size:12px;margin-top:4px">${s.address || ''}</div>
+        <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">
+          <a href="https://www.google.com/maps?q=${s.lat},${s.lng}" target="_blank" rel="noreferrer" style="font-size:12px;color:#2563eb;text-decoration:underline">Google Maps</a>
+          <a href="https://maps.apple.com/?ll=${s.lat},${s.lng}" target="_blank" rel="noreferrer" style="font-size:12px;color:#2563eb;text-decoration:underline">Apple Maps</a>
+        </div>
       </div>`;
       marker.bindPopup(html);
+      // 常時ツールチップで店名を簡易表示
+      marker.bindTooltip(s.name, { permanent: true, direction: 'top', offset: [0, -12], opacity: 0.85 });
       layer.addLayer(marker);
     }
   }
@@ -314,16 +326,25 @@ export default function MapPage() {
         <CardBody>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3 items-end">
             <div className="w-full">
-              <Label>チェーン（複数選択可）</Label>
-              <Select multiple size={5} value={selectedChainIds}
-                      onChange={(e) => {
-                        const opts = Array.from(e.target.selectedOptions).map(o => o.value);
-                        setSelectedChainIds(opts);
-                      }}>
-                {chains.map((c) => (
-                  <option key={c.id} value={c.id}>{c.displayName}</option>
+              <Label>チェーン（検索して選択）</Label>
+              <Input value={chainQuery} onChange={(e) => setChainQuery(e.target.value)} placeholder="例: ステーキ宮 / しゃぶ葉" />
+              <div className="mt-2 max-h-44 overflow-auto rounded-md border border-gray-200 p-2 text-sm dark:border-gray-700">
+                <div className="mb-2 flex gap-2">
+                  <Button size="sm" variant="outline" onClick={() => setSelectedChainIds(filteredChainsForPicker.map(c => c.id))}>表示中から全選択</Button>
+                  <Button size="sm" variant="outline" onClick={() => setSelectedChainIds([])}>選択解除</Button>
+                </div>
+                {filteredChainsForPicker.map(c => (
+                  <label key={c.id} className="mb-1 flex items-center gap-2">
+                    <input type="checkbox" checked={selectedChainIds.includes(c.id)} onChange={(e) => {
+                      setSelectedChainIds(prev => e.target.checked ? Array.from(new Set([...prev, c.id])) : prev.filter(id => id !== c.id));
+                    }} />
+                    <span>{c.displayName}</span>
+                  </label>
                 ))}
-              </Select>
+                {filteredChainsForPicker.length === 0 && (
+                  <div className="text-gray-500">該当なし</div>
+                )}
+              </div>
             </div>
             <div className="w-full">
               <Label>券種（複数選択可）</Label>
@@ -410,6 +431,7 @@ export default function MapPage() {
                         if (!mapInstanceRef.current) return;
                         mapInstanceRef.current.setView([s.lat, s.lng], Math.max(mapInstanceRef.current.getZoom(), 15));
                       }}>地図で見る</Button>
+                      <a className="ml-2 text-xs text-blue-600 hover:underline" href={`https://www.google.com/maps?q=${s.lat},${s.lng}`} target="_blank" rel="noreferrer">Google Maps</a>
                     </div>
                   </div>
                 );
