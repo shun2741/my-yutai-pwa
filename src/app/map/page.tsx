@@ -22,7 +22,6 @@ export default function MapPage() {
   const mapInstanceRef = useRef<any | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [visibleStores, setVisibleStores] = useState<CatalogStore[]>([]);
-  const [tileProvider, setTileProvider] = useState<{ name: 'osm'; style?: string } | null>(null);
 
   // フィルタ状態（チェーン複数 + 所有優待 + 券種）
   const [selectedChainIds, setSelectedChainIds] = useState<string[]>([]);
@@ -160,7 +159,6 @@ export default function MapPage() {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         maxZoom: 19,
       }).addTo(map);
-      setTileProvider({ name: 'osm' });
 
       // 実店舗レイヤー（クラスタリング）
       const cluster = (L as any).markerClusterGroup ? (L as any).markerClusterGroup() : L.layerGroup();
@@ -404,9 +402,7 @@ export default function MapPage() {
           <CardBody>
             <div className="flex items-center justify-between mb-2">
               <div className="text-base font-semibold">マップ</div>
-              <div className="text-xs text-gray-600 dark:text-gray-400">
-                {tileProvider?.name === 'mapbox' ? `Tiles: Mapbox (${tileProvider?.style || ''})` : 'Tiles: OpenStreetMap'}
-              </div>
+              <div className="text-xs text-gray-600 dark:text-gray-400">Tiles: OpenStreetMap</div>
             </div>
             <div ref={mapRef} className="h-[70vh] w-full rounded-lg border border-gray-200 dark:border-gray-800" />
           </CardBody>
